@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saml2p:AuthnRequest xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:stork="urn:eu:stork:names:tc:STORK:1.0:assertion" xmlns:storkp="urn:eu:stork:names:tc:STORK:1.0:protocol" xmlns:xs="http://www.w3.org/2001/XMLSchema" AssertionConsumerServiceURL="http://eid-vag-peps:10001/PEPS/ColleagueResponse" Consent="urn:oasis:names:tc:SAML:2.0:consent:unspecified" Destination="http://eid-vag-peps:10001/PEPS/ColleagueRequest" ForceAuthn="true" ID="_7883ea2fcfc90a483f16f3eb2375e30f" IsPassive="false" IssueInstant="2015-05-26T07:24:13.439Z" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" ProviderName="DEMO-SP-CA" Version="2.0">
+   <saml2:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://S-PEPS.gov.xx</saml2:Issuer>
+   <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:SignedInfo>
+         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+         <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"/>
+         <ds:Reference URI="#_7883ea2fcfc90a483f16f3eb2375e30f">
+            <ds:Transforms>
+               <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+               <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                  <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#" PrefixList="xs"/>
+               </ds:Transform>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/>
+            <ds:DigestValue>HQfn/yl/tWUcA1BiT480D5ejlBSQImD+e07sRW5e1pbiegUS+tsWByxBLodtdnPgVeMa+KYtyqR1rKUEEGyAfQ==</ds:DigestValue>
+         </ds:Reference>
+      </ds:SignedInfo>
+      <ds:SignatureValue>fs9qtiCBp2Qo56rw4Voso/0YKbTED86abhqKT48e297hGlIF/7wlYYKpksU2GVL3CZ7OPz6aKotJb438LyN1zXORspCe+ezyaae04/Y+SsSsd3q6XIn2t0AuLN0mj+hhDY+9qmkVT5GxJOY+tMnKx43WV5VJJPEJlODO83ADWrjKmj7YF1CVmfBPGdgbRCrJFGFkgmt0PYor5VH6N6mJaHJllav3vQD6NGM52M7Gs3tjQO0O5731vsQ+JgvvlegKwhDl9z8xaiufUWw/EkhdRU/gFNsH944l5xPL/kA6ty/ruxxIu4GY3fS7buJLezZiUYDp30mzlWaGexNBXz21nk4DFMgxYKqm2lZorbgsIWedF1XIrYcNLQ5xDmfEa/Vt9s67A8ENQbdzTZfe0MW5JW7OeBXKRwFSaXIP/PRZiSN1jD/KwBKGFe2rEo1EFpUfMRuDBVG28EjCMcgj6fFgYSv/p/ssXh/gy1FH4bl0IOsgQvNCYKeDjQFDklO6d/Qx5YLZpTkvoHChG9Qb8p9d0Vn8JkeXwKahxeaGORAGfUqeVRBx1dEBZRgkAzxAJndm+jwyrf++PfZh6g12r4sm0NiEwvE4WI59lwnJkmfJXzeukr31rWtGYpfzWzVpusgHhTvs9lGHf0kJIwSiKZkQC9KS6G1eM51d5cag4lget2c=</ds:SignatureValue>
+      <ds:KeyInfo>
+         <ds:X509Data>
+            <ds:X509Certificate>MIIFTTCCAzUCBFTI/IgwDQYJKoZIhvcNAQENBQAwazELMAkGA1UEBhMCQ0ExCzAJBgNVBAgMAkVV
+MQswCQYDVQQHDAJFVTEOMAwGA1UECgwFU1BFUFMxDjAMBgNVBAsMBVNUT1JLMSIwIAYDVQQDDBlz
+cGVwcy1jYS1kZW1vLWNlcnRpZmljYXRlMB4XDTE1MDEyODE1MTMxMloXDTE2MDEyODE1MTMxMlow
+azELMAkGA1UEBhMCQ0ExCzAJBgNVBAgMAkVVMQswCQYDVQQHDAJFVTEOMAwGA1UECgwFU1BFUFMx
+DjAMBgNVBAsMBVNUT1JLMSIwIAYDVQQDDBlzcGVwcy1jYS1kZW1vLWNlcnRpZmljYXRlMIICIjAN
+BgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhFXC/GDKjHA0aXwU+xIv+2GyfSjQ2L1ZS1asC5AY
+OLa1PC2TWiljbOj1vRXGlNXG4ue91nQkpMBNg3nMmZtdhP2vfEtT+9V2INQR+1aQ8plPGWNIOX1O
+5NZ/F2M/daAZ2K3Y+WSKLin7FCdBL6Bw0IGFmQUeblIrumMoeRpQhXBfrDHyFW/ozNeB6M9x2bTD
+mk/hjJO8l/auxsPjYzU2+rENS+kEKr10HRy8MTqtfcqVft5blCAUOeDctvsf/5s37JK2MBGjgX6X
+mchLQylOpUZrBo7cNTfc77RjobdgN5rWUyZ8WeEYHtfyUo+nF7DHP2euiuhueFW7Gind+MrcAudI
+JI5r27x4jhneyul1a5OWbGUP84lOoIpzCkvE0w7HbpItDxbnuX09KBmm8lKUingB5CaqG5D+APCW
+T3emo1HIkLX3Jq8OLXNu7c9jPB1xGk4b6ZC2fhCLwvv37bAahWZ81WkqzWLaZpyAKZ+vRCa7WMtt
+HfhVEJmEU/wCgfvv2l1mvCz61H6AQWzEd8ZLwiZnljgDEtxq8sRNZHQVPvBnC9TKyzy6D1/+sZ7R
+8p4AxFHX5UxG+qEtEiz5qXFswXU8gBsKpDO9cG6n7C8Bg8uhsx1TfWJeoe1mtJpKTAvJbqE/O2ak
+QMHu0C2D+fou3jzWjoDfrMJi+9CVqsyICRcCAwEAATANBgkqhkiG9w0BAQ0FAAOCAgEAbywum+pY
+trXnRmtI2zrun7Jum7UpxSlVjW1MUvt0vZHNgunAkDivF1eOXsXQR1boXdjsuvRw3ERMhdpibn7I
+mvFAmMrYMez5PNEusqQ+pzIz2OPa7JIjemx6emZToUKhJ5iqjDlL+J5O7ov6+FrjjlRjfPsMWJdC
+zu3Nk0TBX1pM2PWDs2NoITCOjMI8jv+Ur9gqH8mopYf1SF94RjNKqiSQxAeXr0BM6aWbZzeTXP5z
+Mwlbm0icqAF26YMZgEypCR3UhJmlhgFVd/fPuao6laWS5tsKoYhGXz7llheY1gPNVp28pE6PkD3S
+egbZu2RM9iry0G+v46O+gwYDIuXCyA9BRagiSek4NN9NoHFrLEtbN5PlxcV7UavIxVc+ql/DTq/9
+2d/ENzay/MV1kF2ZHJz+TeOEOWXe0mErN2IDuDrJ1oXXAJZMsV3cn/EUn2NZ1d8mhQB1DpPIzWck
+8PKzzo8+EEWMxYrL3vjrH9SPE0QW2TnMovSvcomg9Zqyd79NCpJkKCt2FKsBziKBcIcjoFj98+9B
+kXexiIiotyQKHKJSScDy6ruhidU5C7jinwrWDhTiEhkpycKviqUm40P3ZCEbFhy0IasjV+pN8edd
+gf4TBex/kF5TeuRD0fBZaQijozdeVlx4lej1SiiUZg+bONGvmrJrkLLlrrjft/7NdP4=</ds:X509Certificate>
+         </ds:X509Data>
+      </ds:KeyInfo>
+   </ds:Signature>
+   <saml2p:Extensions>
+      <stork:QualityAuthenticationAssuranceLevel>3</stork:QualityAuthenticationAssuranceLevel>
+      <stork:spSector>DEMO-SP-CA</stork:spSector>
+      <stork:spInstitution>DEMO-SP-CA</stork:spInstitution>
+      <stork:spApplication>DEMO-SP-CA</stork:spApplication>
+      <stork:spCountry>CA</stork:spCountry>
+      <storkp:eIDSectorShare>false</storkp:eIDSectorShare>
+      <storkp:eIDCrossSectorShare>false</storkp:eIDCrossSectorShare>
+      <storkp:eIDCrossBorderShare>false</storkp:eIDCrossBorderShare>
+      <storkp:RequestedAttributes>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/eIdentifier" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/givenName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/residencePermit" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/citizenQAALevel" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/signedDoc" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false">
+            <stork:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:anyType">
+               <dss:SignRequest xmlns:dss="urn:oasis:names:tc:dss:1.0:core:schema" RequestID="_d96b62a87d18f1095170c1f44c90b5fd">
+                  <dss:InputDocuments>
+                     <dss:Document>
+                        <dss:Base64Data MimeType="text/plain">VGVzdCB0ZXh0</dss:Base64Data>
+                     </dss:Document>
+                  </dss:InputDocuments>
+               </dss:SignRequest>
+            </stork:AttributeValue>
+         </stork:RequestedAttribute>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/eMail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/gender" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/age" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/fiscalNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/nationalityCode" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/isAgeOver" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false">
+            <stork:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:anyType">18</stork:AttributeValue>
+         </stork:RequestedAttribute>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/surname" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/title" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/maritalStatus" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/textResidenceAddress" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/inheritedFamilyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/pseudonym" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/adoptedFamilyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/canonicalResidenceAddress" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/countryCodeOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+      </storkp:RequestedAttributes>
+      <storkp:AuthenticationAttributes>
+         <storkp:VIDPAuthenticationAttributes>
+            <storkp:CitizenCountryCode>CA</storkp:CitizenCountryCode>
+            <storkp:SPInformation>
+               <storkp:SPID>DEMO-SP-CA</storkp:SPID>
+            </storkp:SPInformation>
+         </storkp:VIDPAuthenticationAttributes>
+      </storkp:AuthenticationAttributes>
+   </saml2p:Extensions>
+</saml2p:AuthnRequest>

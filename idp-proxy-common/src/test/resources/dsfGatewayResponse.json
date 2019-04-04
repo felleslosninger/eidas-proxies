@@ -1,0 +1,25 @@
+{
+	"dsfPersonResource": {
+		"foedselsnr":"01017100552",
+		"foedselsdato":"19710101",
+		"foedselsnrType":"1",
+		"foedselsaar":"1971",
+		"foedelandKode":"NO",
+		"statusKode":"1",
+		"spesRegKode":"3",
+		"etternavn":"KRANE",
+		"fornavn":"HARALD",
+		"mellomnavn":"FOS",
+		"kjoenn":"M",
+		"sivilstatusKode":"1",
+		"hjemlandKode":"NO",
+		"postnr":"0603",
+		"gateadresse":"ETTERSTAD",
+		"postnr":"0603",
+		"postadresse":"0603 OSLO",
+		"postadresseLand":"Norway",
+		"postadresseLandKode":"NO",
+		"postadresseTilleggslinje":null
+	},
+	"antallTreff":1
+}

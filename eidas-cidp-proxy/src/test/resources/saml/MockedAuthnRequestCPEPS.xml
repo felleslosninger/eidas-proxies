@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saml2p:AuthnRequest xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:stork="urn:eu:stork:names:tc:STORK:1.0:assertion" xmlns:storkp="urn:eu:stork:names:tc:STORK:1.0:protocol" AssertionConsumerServiceURL="http://eid-vag-opensso.difi.local:10007/stork-peps/CPepsResponseMock" Consent="urn:oasis:names:tc:SAML:2.0:consent:unspecified" Destination="http://localhost:8888/eidas-cidp-proxy/auth" ForceAuthn="true" ID="_220e2d35fee85258bff0843c09b39420" IsPassive="false" IssueInstant="2015-06-22T11:25:47.768Z" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" ProviderName="PepsMock" Version="2.0">
+   <saml2:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://S-PEPS.gov.xx</saml2:Issuer>
+   <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:SignedInfo>
+         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+         <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"/>
+         <ds:Reference URI="#_220e2d35fee85258bff0843c09b39420">
+            <ds:Transforms>
+               <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+               <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/>
+            <ds:DigestValue>vl0Y3pOGspyf8wLcQ5C532zd2JenunwdqRBzHHwSSe9C3Fkk9H4x6q1NnFdAYWDnGMoBaUdVAEWQW9XYvWMFcw==</ds:DigestValue>
+         </ds:Reference>
+      </ds:SignedInfo>
+      <ds:SignatureValue>ZXRc16DMbCCbXW1hHzj2WkCE7+yjHE2jRwpACjpz7x4VZke56XueRSm2Hn1vb3QwJ+Ea2FuA1hhd4GSWyLGt2VVnfo0PJe3Ial+9APvV9kmujjpSHBTdq/lohHfy6pG3OIsaFkOXrECOY1yH5iw/E0i78gc+omJQPRapouTGSr2xU0W3I9KB30qSJjR8bXHaVbJAPkjjirjTSP4RfQYRjX/5RGGELSFEU/F3ZEawB4xRB4sfLFnUNYgpyXnykaBLUpGI5+FsfaJbauyh0gQ9ubb5kJ2Vn7Ozyr+tJB9fqcAE0Dy9qwP4blsTl5we4U8jRo5lsFD6KeO7F7V/myuv9Suz31HTrwGQnPk2lMuxQEos0W/jOvl+i0c4KTredL73h37VY5kv7PMGYOFLmbNclxvRMNAyGZXBJF5+ruNUDmmzx1t2kGz/zHiQfzt086OI64DwmdPoUmdSe3nalGitERJd5zJCTKxKTVS7Opz3F82ccyAD/ZbqybkQpr4yeL1vCaFT6k6uQiADYO7tIomKdVtcRboF1bTAoC9O9x4NTcERM1eIyjuBmFXa3bSgW0rzPOlSVkdUi+5d6s3+zLjMo4jJLsPhz81kgDXzysVsTcOLthlNNXcvhVZL6DJAaVtncoMTBjxzMZRo0ab4hjpDoBANt4uADTZMwkzUhtddXE8=</ds:SignatureValue>
+      <ds:KeyInfo>
+         <ds:X509Data>
+            <ds:X509Certificate>MIIFTTCCAzUCBFTI/IgwDQYJKoZIhvcNAQENBQAwazELMAkGA1UEBhMCQ0ExCzAJBgNVBAgMAkVV
+MQswCQYDVQQHDAJFVTEOMAwGA1UECgwFU1BFUFMxDjAMBgNVBAsMBVNUT1JLMSIwIAYDVQQDDBlz
+cGVwcy1jYS1kZW1vLWNlcnRpZmljYXRlMB4XDTE1MDEyODE1MTMxMloXDTE2MDEyODE1MTMxMlow
+azELMAkGA1UEBhMCQ0ExCzAJBgNVBAgMAkVVMQswCQYDVQQHDAJFVTEOMAwGA1UECgwFU1BFUFMx
+DjAMBgNVBAsMBVNUT1JLMSIwIAYDVQQDDBlzcGVwcy1jYS1kZW1vLWNlcnRpZmljYXRlMIICIjAN
+BgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhFXC/GDKjHA0aXwU+xIv+2GyfSjQ2L1ZS1asC5AY
+OLa1PC2TWiljbOj1vRXGlNXG4ue91nQkpMBNg3nMmZtdhP2vfEtT+9V2INQR+1aQ8plPGWNIOX1O
+5NZ/F2M/daAZ2K3Y+WSKLin7FCdBL6Bw0IGFmQUeblIrumMoeRpQhXBfrDHyFW/ozNeB6M9x2bTD
+mk/hjJO8l/auxsPjYzU2+rENS+kEKr10HRy8MTqtfcqVft5blCAUOeDctvsf/5s37JK2MBGjgX6X
+mchLQylOpUZrBo7cNTfc77RjobdgN5rWUyZ8WeEYHtfyUo+nF7DHP2euiuhueFW7Gind+MrcAudI
+JI5r27x4jhneyul1a5OWbGUP84lOoIpzCkvE0w7HbpItDxbnuX09KBmm8lKUingB5CaqG5D+APCW
+T3emo1HIkLX3Jq8OLXNu7c9jPB1xGk4b6ZC2fhCLwvv37bAahWZ81WkqzWLaZpyAKZ+vRCa7WMtt
+HfhVEJmEU/wCgfvv2l1mvCz61H6AQWzEd8ZLwiZnljgDEtxq8sRNZHQVPvBnC9TKyzy6D1/+sZ7R
+8p4AxFHX5UxG+qEtEiz5qXFswXU8gBsKpDO9cG6n7C8Bg8uhsx1TfWJeoe1mtJpKTAvJbqE/O2ak
+QMHu0C2D+fou3jzWjoDfrMJi+9CVqsyICRcCAwEAATANBgkqhkiG9w0BAQ0FAAOCAgEAbywum+pY
+trXnRmtI2zrun7Jum7UpxSlVjW1MUvt0vZHNgunAkDivF1eOXsXQR1boXdjsuvRw3ERMhdpibn7I
+mvFAmMrYMez5PNEusqQ+pzIz2OPa7JIjemx6emZToUKhJ5iqjDlL+J5O7ov6+FrjjlRjfPsMWJdC
+zu3Nk0TBX1pM2PWDs2NoITCOjMI8jv+Ur9gqH8mopYf1SF94RjNKqiSQxAeXr0BM6aWbZzeTXP5z
+Mwlbm0icqAF26YMZgEypCR3UhJmlhgFVd/fPuao6laWS5tsKoYhGXz7llheY1gPNVp28pE6PkD3S
+egbZu2RM9iry0G+v46O+gwYDIuXCyA9BRagiSek4NN9NoHFrLEtbN5PlxcV7UavIxVc+ql/DTq/9
+2d/ENzay/MV1kF2ZHJz+TeOEOWXe0mErN2IDuDrJ1oXXAJZMsV3cn/EUn2NZ1d8mhQB1DpPIzWck
+8PKzzo8+EEWMxYrL3vjrH9SPE0QW2TnMovSvcomg9Zqyd79NCpJkKCt2FKsBziKBcIcjoFj98+9B
+kXexiIiotyQKHKJSScDy6ruhidU5C7jinwrWDhTiEhkpycKviqUm40P3ZCEbFhy0IasjV+pN8edd
+gf4TBex/kF5TeuRD0fBZaQijozdeVlx4lej1SiiUZg+bONGvmrJrkLLlrrjft/7NdP4=</ds:X509Certificate>
+         </ds:X509Data>
+      </ds:KeyInfo>
+   </ds:Signature>
+   <saml2p:Extensions>
+      <stork:QualityAuthenticationAssuranceLevel>4</stork:QualityAuthenticationAssuranceLevel>
+      <stork:spSector>SE</stork:spSector>
+      <stork:spInstitution>PepsMock</stork:spInstitution>
+      <stork:spApplication>PepsMock</stork:spApplication>
+      <storkp:eIDSectorShare>false</storkp:eIDSectorShare>
+      <storkp:eIDCrossSectorShare>false</storkp:eIDCrossSectorShare>
+      <storkp:eIDCrossBorderShare>false</storkp:eIDCrossBorderShare>
+      <storkp:RequestedAttributes>
+         <stork:RequestedAttribute Name="http://www.stork.gov.eu/1.0/eIdentifier" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+      </storkp:RequestedAttributes>
+      <storkp:AuthenticationAttributes>
+         <storkp:VIDPAuthenticationAttributes>
+            <storkp:CitizenCountryCode>SE</storkp:CitizenCountryCode>
+            <storkp:SPInformation>
+               <storkp:SPID>PEPSMOCK</storkp:SPID>
+            </storkp:SPInformation>
+         </storkp:VIDPAuthenticationAttributes>
+      </storkp:AuthenticationAttributes>
+   </saml2p:Extensions>
+</saml2p:AuthnRequest>

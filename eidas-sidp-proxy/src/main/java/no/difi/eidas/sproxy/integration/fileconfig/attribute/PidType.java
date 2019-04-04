@@ -1,0 +1,9 @@
+package no.difi.eidas.sproxy.integration.fileconfig.attribute;
+
+public enum PidType {
+    UTLENDINGSMYNDIGHETENES_IDENTIFIKASJONS_NUMMER,
+    TAX_IDENTIFICATION_NUMBER,
+    SOCIAL_SECURITY_NUMBER,
+    UTENLANDSK_IDENTIFIKASJONS_NUMMER
+
+}

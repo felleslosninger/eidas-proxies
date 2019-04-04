@@ -1,0 +1,84 @@
+# Spring Boot Actuator
+management:
+    endpoint:
+        health:
+            show-details: <%= @health_show_details %>
+
+spring:
+    resources:
+        cache:
+            cachecontrol:
+                max-age: 31536000
+    error:
+        whitelabel:
+            enabled: false
+    mvc:
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+
+
+## Generic application config
+auditlog:
+    dataSeparator: '|'
+    dir: <%= @auditlog_dir %>
+    file: <%= @auditlog_file %>
+
+eventlog:
+    jms:
+        queuename: <%= @eventlog_jms_queuename %>
+        url: <%= @eventlog_jms_url %>
+
+## Tomcat access log
+server:
+    port: <%= @server_port %>
+    tomcat:
+        basedir: <%= @tomcat_tmp_dir %>
+        accesslog:
+          directory: <%= @log_root%><%= @application %>
+        max-threads: <%= @server_tomcat_max_threads%>
+        min-spare-threads: <%= @server_tomcat_min_spare_threads%>
+    servlet:
+        context-path: /<%= @context %>
+
+dsf:
+    gateway:
+        retryCount: <%= @eidas_sidp_proxy_retry_count %>
+        timeout: <%= @eidas_sidp_proxy_timeout %>
+        url: <%= @dsf_gateway_url %>
+eidas:
+    sidp-proxy:
+        dummyEnabled: <%= @eidas_sidp_proxy_dummy_enabled %>
+eidas-node:
+    url: <%= @eidas_node_url %>
+
+fileconfig:
+    countriesAttributes: <%= @fileconfig_countries_attributes %>
+    readPeriod: <%= @fileconfig_read_period %>
+
+idporten:
+    keystore:
+        alias: <%= @idporten_keystore_alias %>
+        location: file:<%= @config_dir %><%= @application %>/<%= @idporten_keystore_location %>
+        password: <%= @idporten_keystore_password %>
+        privatekeyPassword: <%= @idporten_keystore_privatekey_password %>
+        type: <%= @idporten_keystore_type %>
+mf:
+    gateway:
+        retryCount: <%= @mf_gateway_retry_count %>
+        timeout: <%= @mf_gateway_timeout %>
+        url: <%= @mf_gateway_url %>
+saml:
+    idp:
+        entityName: <%= @saml_proxy_idp_entity_name %>
+    instantIssueTimeSkew: <%= @saml_instant_issue_time_skew %>
+    instantIssueTimeToLive: <%= @saml_instant_issue_time_to_live %>
+
+sidp-proxy:
+    url: <%= @eidas_sidp_proxy_url %>
+users:
+    test: <%= @mf_test_users.map{ |user| "#{user['eidas_identifier']}:#{user['d_number']}" }.join(',') %>
+samlengine:
+    path: <%= @config_dir %><%= @application %>/
+message:
+    path: file:<%= @config_dir %><%= @application %>

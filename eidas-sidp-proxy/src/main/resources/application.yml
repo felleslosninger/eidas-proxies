@@ -1,0 +1,100 @@
+# Custom version actuator
+project:
+  version: @project.version@
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "version, info, health"
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+
+## Generic application config
+auditlog:
+  dataSeparator: '|'
+  dir: c:\var\log\eidas-proxy
+  file: audit.log
+
+eventlog:
+  jms:
+    queuename: logqueue
+    url: tcp://localhost:9999
+
+## Tomcat access log
+server:
+  port: 8081
+  tomcat:
+    accesslog:
+      directory: c://var/log/eidas-sidp-proxy
+      enabled: true
+      rotate: false
+      pattern: "%h\u0009%l\u0009%u\u0009%t\u0009\u0022%r\u0022\u0009%s\u0009%b\u0009%D\u0009%{no.difi.correlationId}i"
+  servlet:
+    context-path: /eidas-sidp-proxy
+
+spring:
+  resources:
+    cache:
+      cachecontrol:
+        max-age: 31536000
+  error:
+    whitelabel:
+      enabled: false
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+messages:
+  cache:
+    seconds: "-1"
+
+dsf:
+  gateway:
+    url: http://eid-systest-admin01.dmz.local:10009/dsf-gateway/
+    retryCount: 10
+    timeout: 1000
+
+mf:
+  gateway:
+    url: http://localhost/mf-gateway
+    timeout: 5000
+    retryCount: 1
+
+
+client:
+  id: IdpProxy
+
+eidas-node:
+  url: http://localhost/EidasNode/ServiceProvider
+
+fileconfig:
+  countriesAttributes: /etc/opt/eidas-sidp-proxy/countriesAttributes.json
+  readPeriod: 60000
+idporten:
+  keystore:
+    alias: selfsigned
+    location: idPortenKeystore.jks
+    password: password
+    privatekeyPassword: password
+    type: jks
+saml:
+  idp:
+    entityName: eidas-proxy-idp
+  instantIssueTimeSkew: 2
+  instantIssueTimeToLive: 10000000
+sidp-proxy:
+  url: http://eid-vag-opensso.difi.local:10008/eidas-sidp-proxy/
+users:
+  test: CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693
+samlengine:
+  path:
+message:
+  path: blalsøkjfsldøjf

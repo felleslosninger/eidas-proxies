@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="check_certificate_validity_period">false</entry>
+    <entry key="disallow_self_signed_certificate">false</entry>
+    <entry key="response.encryption.mandatory">true</entry>
+
+    <!-- Data Encryption algorithm -->
+    <entry key="data.encryption.algorithm">http://www.w3.org/2009/xmlenc11#aes256-gcm</entry>
+
+    <!-- Decryption algorithm Whitelist-->
+    <entry key="encryption.algorithm.whitelist">
+        http://www.w3.org/2009/xmlenc11#aes128-gcm;
+        http://www.w3.org/2009/xmlenc11#aes256-gcm;
+        http://www.w3.org/2009/xmlenc11#aes192-gcm
+    </entry>
+    <entry key="keyStorePath"><%= @cidpproxy_keystore_location %></entry>
+    <entry key="keyStorePassword"><%= @cidpproxy_keystore_password %></entry>
+    <entry key="keyPassword"><%= @cidpproxy_privatekey_password %></entry>
+    <entry key="serialNumber"><%= @cidpproxy_keystore_serial_number %></entry>
+    <entry key="keyStoreType"><%= @cidpproxy_keystore_type %></entry>
+
+    <!-- Management of the encryption activation -->
+    <entry key="encryptionActivation">encryptionConf.xml</entry>
+
+    <!-- … other requesters to which the responses wil be encrypted …- - >
+    <!—private key to be used for decryption-->
+    <entry key="responseDecryptionIssuer"><%= @cidpproxy_keystore_issuer %></entry>
+</properties>

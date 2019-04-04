@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instances>
+
+    <instance name="eidas-sidp-proxy">
+        <configuration name="SamlEngineConf">
+            <parameter name="fileConfiguration" value="SamlEngine_eidas-sidp-proxy.xml"/>
+        </configuration>
+        <configuration name="SignatureConf">
+            <!--<parameter name="class" value="eu.eidas.auth.engine.core.impl.SignSW" />-->
+            <parameter name="class" value="no.difi.eidas.samlengine.DualKeyStoreProtocolSigner"/>
+            <parameter name="fileConfiguration" value="SignModule.properties"/>
+        </configuration>
+        <!--configuration name="EncryptionConf">
+            <parameter name="class"
+                       value="eu.eidas.auth.engine.core.impl.EncryptionSW"/>
+            <parameter name="fileConfiguration" value="EncryptModule_eidas-cidp-proxy.properties.xml"/>
+        </configuration-->
+        <configuration name="ProtocolProcessorConf">
+            <parameter name="class" value="eu.eidas.auth.engine.core.eidas.EidasProtocolProcessor"/>
+            <parameter name="coreAttributeRegistryFile" value="saml-engine-eidas-attributes.xml"/>
+            <parameter name="additionalAttributeRegistryFile"
+                       value="saml-engine-additional-attributes.xml"/>
+        </configuration>
+        <configuration name="ClockConf">
+            <parameter name="class" value="eu.eidas.auth.engine.SamlEngineSystemClock"/>
+        </configuration>
+    </instance>
+
+</instances>

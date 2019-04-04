@@ -1,0 +1,27 @@
+---
+classes:
+- eidas_sidp_proxy
+- filebeat
+
+# ********************************************************************************
+# * Configuration for eidas_sidp_proxy
+# ********************************************************************************
+eidas_sidp_proxy::eidas_node_url:                 'https://eid-atest-web01.dmz.local/eidas-node-no/ServiceProvider'
+eidas_sidp_proxy::url:                            'https://eid-atest-web01.dmz.local/eidas-sidp-proxy/'
+eidas_sidp_proxy::server_port:                     8080
+
+# temp config before update platform.yaml in puppet-hiera for ondemand
+mf::mf_gateway_url:                               'http://mf-gateway:8080'
+# ********************************************************************************
+# * Configuration for filebeat
+# ********************************************************************************
+filebeat::prospectors:
+  tomcat-access:
+    paths:
+    - '/usr/local/tomcat/logs/localhost_access_log*.txt'
+    doc_type: 'tomcat-access'
+    fields_under_root: true
+    fields:
+      application: eidas-sidp-proxy
+      environment: ondemand
+      log_env : "${LOG_ENV:unset}"

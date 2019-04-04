@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+version=DEV-SNAPSHOT
+registry=local
+stackName=eidas
+
+copyArtifact() {
+    local imageName=$1
+    local artifactGroupId=$2
+    local artifactName=$3
+    local artifactVersion=$4
+    local artifactPackaging=${5-'jar'}
+    local artifactClassifier=${6-}
+    local targetDirectory=$(targetDirectory ${artifactGroupId} ${artifactName} ${artifactVersion} ${imageName})
+    mkdir -p ${targetDirectory}
+    cp ${artifactName}/target/$(fileName ${artifactName} DEV-SNAPSHOT ${artifactPackaging} ${artifactClassifier}) \
+        ${targetDirectory}/$(fileName ${artifactName} ${artifactVersion} ${artifactPackaging} ${artifactClassifier})
+}
+
+fileName() {
+    local name=$1
+    local version=$2
+    local packaging=$3
+    local classifier=$4
+    echo ${artifactName}-${version}${artifactClassifier:+-${artifactClassifier}}.${artifactPackaging}
+}
+
+downloadArtifact() {
+    local imageName=$1
+    local artifactGroupId=$2
+    local artifactName=$3
+    local artifactVersion=$4
+    local artifactPackaging=${5-'jar'}
+    local targetDirectory=$(targetDirectory ${artifactGroupId} ${artifactName} ${artifactVersion} ${imageName})
+    mvn dependency:copy -Dartifact=${artifactGroupId}:${artifactName}:${artifactVersion}:${artifactPackaging} -DoutputDirectory=${targetDirectory}
+}
+
+targetDirectory() {
+    local artifactGroupId=$1
+    local artifactName=$2
+    local artifactVersion=$3
+    local imageName=$4
+    echo -n "docker/${imageName}/maven/${artifactGroupId//.//}/${artifactName}/${artifactVersion}"
+}
+
+rm -rf docker/eidas-sidp-proxy/puppet_hiera/*  docker/eidas-sidp-proxy/puppet_modules/* docker/eidas-sidp-proxy/war/*
+rm -rf docker/eidas-cidp-proxy/puppet_hiera/*  docker/eidas-cidp-proxy/puppet_modules/* docker/eidas-cidp-proxy/war/*|| exit 1
+
+mvn package -DskipTests || exit 1
+
+docker/build-images ${registry} ${version} file:///maven DEV || exit 1
+rm -rf docker/eidas-sidp-proxy/puppet_hiera/*  docker/eidas-sidp-proxy/puppet_modules/* docker/eidas-sidp-proxy/war/*
+rm -rf docker/eidas-cidp-proxy/puppet_hiera/*  docker/eidas-cidp-proxy/puppet_modules/* docker/eidas-cidp-proxy/war/*|| exit 1
+
+echo "LOG_ENV=$(whoami)" > docker/log_config
+VERSION=${version} REGISTRY=${registry} docker stack deploy -c docker/stack.yml --resolve-image=never ${stackName} || exit 1
+docker stack deploy -c docker/stack-local.yml ${stackName} || exit 1
+rm docker/log_config
+docker service update --publish-add 443:443 ${stackName}_web
+docker service inspect ${stackName}_desktop --format \
+	    'Miljøet kan nås på vnc://localhost:{{(index .Endpoint.Ports 0).PublishedPort}} eller http://localhost:{{(index .Endpoint.Ports 1).PublishedPort}} (passord: vncpassword)'

@@ -1,0 +1,67 @@
+project:
+    version: 'TEST-SNAPSHOT'
+
+auditlog:
+    dataSeparator: '|'
+    dir: c:\var\log\eidas-cidp-proxy\audit
+    file: audit.log
+client:
+    id: IdpProxy
+dsf:
+    gateway:
+        retryCount: 2
+        timeout: 10000
+        url: http://eid-vag-admin:10009/dsf-gateway
+eidas-node:
+    url: http://localhost/EidasNode/ServiceProvider
+eventlog:
+    jms:
+        queuename: logqueue
+        url: tcp://eid-vag-admin.difi.local:61616
+fileconfig:
+    countriesAttributes: /etc/opt/eidas-sidp-proxy/countriesAttributes.json
+    readPeriod: 60000
+idporten:
+    keystore:
+        alias: selfsigned
+        location: idPortenKeystore.jks
+        password: password
+        privatekeyPassword: password
+        type: jks
+mf:
+    gateway:
+        retryCount: 1
+        timeout: 5000
+        url: http://mf-gateway
+saml:
+    idp:
+        entityid: vagrant-idp
+        metadata:
+            file: /etc/opt/eidas-cidp-proxy/idp_metadata.xml
+    sp:
+        metadata:
+            file: /etc/opt/eidas-cidp-proxy/sp_metadata.xml
+        entityid: eidas-cidp-proxy
+    instantIssueTimeSkew: 60
+    instantIssueTimeToLive: 300
+cidpproxy:
+    keystore:
+        location: idPortenKeystore.jks
+        password: changeit
+        privatekeyPassword: changeit
+        alias: test
+        type: jks
+    url: http://eid-vag-opensso.difi.local:10009/eidas-cidp-proxy
+oidc:
+    issuerUri: http://provider/test
+    client:
+        id: test
+        secret: test
+    redirectUri: http://localhost/oidc/callback
+    enable: true
+users:
+    test: 19890605.CE/NO/05061989:05068907693
+samlengine:
+    path: test
+message:
+    path:

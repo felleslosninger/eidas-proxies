@@ -1,0 +1,236 @@
+version: '3.5'
+
+services:
+  eidas-sidp-proxy:
+    image: ${REGISTRY}/eidas-sidp-proxy:${VERSION}
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eidas-cidp-proxy:
+    image: ${REGISTRY}/eidas-cidp-proxy:${VERSION}
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eidas-node-no:
+    image: eid-jenkins02.dmz.local:8081/eidas-node-no:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eidas-demo-node:
+    image: eid-jenkins02.dmz.local:8081/eidas-demo-node:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eidas-demo-idp:
+    image: eid-jenkins02.dmz.local:8081/eidas-demo-idp:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eidas-demo-sp:
+    image: eid-jenkins02.dmz.local:8081/eidas-demo-sp:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  opendj:
+    image: eid-jenkins02.dmz.local:8081/opendj:latest
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  idporten-openam:
+    image: eid-jenkins02.dmz.local:8081/idporten-openam:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  web:
+    image: eid-jenkins02.dmz.local:8081/web:latest
+    ports:
+      - 443
+    networks:
+      atest:
+        aliases:
+          - eid-atest-web01.dmz.local
+          - eid-inttest-web01.dmz.local
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  idporten-admin:
+    image: eid-jenkins02.dmz.local:8081/idporten-admin:latest
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  kontaktregister-db:
+    image: eid-jenkins02.dmz.local:8081/kontaktregister-db:latest
+    ports:
+      - 3306
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  kontaktinfo-backend:
+    image: eid-jenkins02.dmz.local:8081/kontaktinfo-backend:latest
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  logwriter:
+    image: eid-jenkins02.dmz.local:8081/logwriter:latest
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  eventlog-db:
+    image: eid-jenkins02.dmz.local:8081/eventlog-db:latest
+    ports:
+      - 3306
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  activemq:
+    image:  rmohr/activemq:5.11.1
+    extra_hosts:
+      - "eid-elk-app01.dmz.local:10.243.220.21"
+    ports:
+      - 61616
+      - 8161
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  dsf-gateway:
+    image: eid-jenkins02.dmz.local:8081/dsf-gateway:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  mf-gateway:
+    image: eid-jenkins02.dmz.local:8081/mf-gateway:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  testsp-saml:
+    image: eid-jenkins02.dmz.local:8081/testsp-saml:latest
+    ports:
+      - 8080
+    networks:
+      atest:
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+  selenium:
+    image: selenium/standalone-firefox-debug:3.13.0
+    ports:
+      - 4444
+      - 5900
+    networks:
+      atest:
+        aliases:
+          - selenium_host
+    dns: 8.8.8.8
+    deploy:
+      placement:
+        constraints:
+          - node.labels.atest == true
+
+networks:
+  atest:
+    driver: overlay
+    attachable: true

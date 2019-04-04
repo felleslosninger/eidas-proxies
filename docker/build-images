@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+buildImage() {
+    local registry=$1
+    local imageName=$2
+    local version=$3
+    local options=$4
+    docker build  ${options} -t ${registry}/${imageName}:${version} docker/${imageName} || { >&2 echo "Failed to build image ${imageName}"; return 1; }
+}
+
+build() {
+    [[ $# -ge 2 ]] || { >&2 echo "Usage: $0 REGISTRY VERSION [MAVEN_REPOSITORY] [MAVEN_ARTIFACT_VERSION]"; return 1; }
+    local registry=$1
+    local version=$2
+    local mavenRepository=${3:-http://eid-jenkins02.dmz.local:8080/repository/pipeline}
+    local mavenArtifactVersion=${4:-${version}}
+    local mavenRepositoryUrl=${mavenRepository%/*}
+    local mavenRepositoryName=${mavenRepository##*/}
+
+    cp -r puppet_modules docker/eidas-cidp-proxy/ || return 1
+    cp -r puppet_hiera docker/eidas-cidp-proxy/ || return 1
+    cp eidas-cidp-proxy/target/eidas-cidp-proxy.war docker/eidas-cidp-proxy/war/eidas-cidp-proxy.war || return 1
+    buildImage ${registry} eidas-cidp-proxy ${version}   "" || return 1
+    cp -r puppet_modules docker/eidas-sidp-proxy/ || return 1
+    cp -r puppet_hiera docker/eidas-sidp-proxy/ || return 1
+    cp eidas-sidp-proxy/target/eidas-sidp-proxy.war docker/eidas-sidp-proxy/war/eidas-sidp-proxy.war || return 1
+    buildImage ${registry} eidas-sidp-proxy  ${version}  "" || return 1
+}
+
+build "${@}" || exit 1

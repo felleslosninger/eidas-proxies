@@ -1,0 +1,39 @@
+{
+  "defaultAttributes": [
+    {
+      "name": "FamilyName",
+      "required": true
+    },
+    {
+      "name": "FirstName",
+      "required": true
+    },
+    {
+      "name": "DateOfBirth",
+      "required": true
+    },
+    {
+      "name": "PersonIdentifier",
+      "required": true
+    }
+  ],
+  "countries": [
+    {
+      "countryCode": "se",
+      "countryName": "Sweden",
+      "pidAttributeName": "PID",
+      "pidType": "UTLENDINGSMYNDIGHETENES_IDENTIFIKASJONS_NUMMER",
+      "regex": "*",
+      "attributes": [
+        {
+          "name": "PlaceOfBirth",
+          "required": true
+        },
+        {
+          "name": "PID",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

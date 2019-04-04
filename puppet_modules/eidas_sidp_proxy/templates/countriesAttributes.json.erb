@@ -1,0 +1,32 @@
+{
+  "defaultAttributes": [
+    {
+      "name": "PersonIdentifier",
+      "required": true
+    },
+    {
+      "name": "DateOfBirth",
+      "required": true
+    },
+    {
+      "name": "FamilyName",
+      "required": true
+    },
+    {
+      "name": "FirstName",
+      "required": true
+    }
+  ],
+  "countries": [
+<% @available_countries.sort.each do |index, country| -%>
+    {
+      "countryCode": "<%= country['countryCode'] %>",
+      "countryName": "<%= country['countryName'] %>",
+      "attributes": [<%= country['attributes'] %>],
+      "pidAttributeName": <% if (country['pidAttributeName'] == nil) %>null<% else %>"<%= country['pidAttributeName'] %>"<% end %>,
+      "pidType": <% if (country['pidType'] == nil) %>null<% else %>"<%= country['pidType'] %>"<% end %>,
+      "regex": <% if (country['regex'] == nil) %>null<% else %>"<%= country['regex'] %>"<% end %>
+    }<% if (index.to_i < @available_countries.length) -%>,<% end %>
+<% end -%>
+  ]
+}

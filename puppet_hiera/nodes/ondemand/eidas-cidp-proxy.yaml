@@ -1,0 +1,33 @@
+---
+classes:
+- eidas_cidp_proxy
+- filebeat
+
+
+
+
+# ********************************************************************************
+# * Configuration for eidas_cidp_proxy
+# ********************************************************************************
+eidas_cidp_proxy::sp_entityid:                     'eidas-cidp-proxy'
+
+eidas_cidp_proxy::url:                             'https://eid-atest-web01.dmz.local/eidas-cidp-proxy'
+eidas_cidp_proxy::server_port:                     8080
+
+eidas_cidp_proxy::oidc_client_id:                  'oidc_test_rp'
+eidas_cidp_proxy::oidc_client_secret:              'test'
+eidas_cidp_proxy::oidc_redirect_uri:                'https://eid-atest-web01.dmz.local/eidas-cidp-proxy/oidc/callback'
+
+# temp config before update platform.yaml in puppet-hiera for ondemand
+mf::mf_gateway_url:                               'http://mf-gateway:8080'
+
+filebeat::prospectors:
+  tomcat-access:
+    paths:
+    - '/usr/local/tomcat/logs/localhost_access_log*.txt'
+    doc_type: 'tomcat-access'
+    fields_under_root: true
+    fields:
+      application: eidas-cidp-proxy
+      environment: ondemand
+      log_env : "${LOG_ENV:unset}"

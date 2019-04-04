@@ -1,0 +1,100 @@
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "version, info, health"
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    health:
+      show-details: <%= @health_show_details %>
+      enabled: true
+
+## Generic application config
+auditlog:
+  dir: <%= @auditlog_dir %>
+  file: <%= @auditlog_file %>
+  dataSeparator: |
+
+eventlog:
+  jms:
+    url: <%= @eventlog_jms_url %>
+    queuename: <%= @eventlog_jms_queuename %>
+
+
+## Tomcat access log
+server:
+  port: <%= @server_port %>
+  tomcat:
+    basedir: <%= @tomcat_tmp_dir %>
+    accesslog:
+      directory: <%= @log_root%><%= @application %>
+    max-threads: <%= @server_tomcat_max_threads%>
+    min-spare-threads: <%= @server_tomcat_min_spare_threads%>
+  servlet:
+    context-path: /<%= @context %>
+
+spring:
+  resources:
+    cache:
+      cachecontrol:
+        max-age: 31536000
+  error:
+    whitelabel:
+      enabled: false
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+messages:
+  cache:
+    seconds: "-1"
+
+dsf:
+  gateway:
+    url: <%= @dsf_gateway_url %>
+    connectTimeout: <%= @dsf_gateway_timeout %>
+    readTimeout: 1000
+    retryCount: <%= @dsf_gateway_retry_count %>
+
+mf:
+  gateway:
+    url: <%= @mf_gateway_url %>
+    timeout: <%= @mf_gateway_timeout %>
+    retryCount: <%= @mf_gateway_retry_count %>
+
+saml:
+  instantIssueTimeToLive: <%= @saml_instant_issue_time_to_live %>
+  instantIssueTimeSkew: <%= @saml_instant_issue_time_skew %>
+  sp:
+    metadata:
+      file: <%= @config_dir %><%= @application %>/sp_metadata.xml
+    entityid: <%= @saml_proxy_sp_entity_name %>
+  idp:
+    metadata:
+      file: <%= @config_dir %><%= @application %>/idp_metadata.xml
+    entityid: <%= @saml_idp_entity_name %>
+
+cidpproxy:
+  keystore:
+    location: file:<%= @config_dir %><%= @application %>/<%= @cidpproxy_keystore_location %>
+    password: <%= @cidpproxy_keystore_password %>
+    privatekeyPassword: <%= @cidpproxy_privatekey_password %>
+    alias: <%= @cidpproxy_keystore_alias %>
+    type: <%= @cidpproxy_keystore_type %>
+  url: <%= @cidpproxy_url %>
+
+oidc:
+  enable: <%= @oidc_enable %>
+  issuerUri: <%= @oidc_issuer_uri %>
+  client:
+    id: <%= @oidc_client_id %>
+    secret: <%= @oidc_client_secret %>
+  redirectUri: <%= @oidc_redirect_uri %>
+samlengine:
+  path: <%= @config_dir %><%= @application %>/
+message:
+  path: file:<%= @config_dir %><%= @application %>

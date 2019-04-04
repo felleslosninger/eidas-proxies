@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><saml2p:ArtifactResolve xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" ID="_d62239f33e643c3e9353cbf12d0469c0" IssueInstant="2015-06-18T09:17:47.131Z" Version="2.0">
+   <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">testsp</saml2:Issuer>
+   <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:SignedInfo>
+         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+         <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+         <ds:Reference URI="#_d62239f33e643c3e9353cbf12d0469c0">
+            <ds:Transforms>
+               <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+               <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+            <ds:DigestValue>TgW2VdlroYLogibJD12ikEnvFeA=</ds:DigestValue>
+         </ds:Reference>
+      </ds:SignedInfo>
+      <ds:SignatureValue>pyz9GSDwezF41j/lmFHBOg0DHDoMWjSC23B2T2UgIwHp2UYqsk7csIlFebM8N8UwLXd5wwPrN6LVWNr3H3XxB+s+lOAMlra/xhtIfMlgjnrvhL/rwghZWe90aT7NEci8n1wL1f4ZRG8OlzL7U6aT5TYKUmWoQZfbxmhOBF/vwaI=</ds:SignatureValue>
+      <ds:KeyInfo/>
+   </ds:Signature>
+   <saml2p:Artifact>AAQAAHh4rmXynxE9fFjEc3bPn8FL2jEzZ5rozFwNWX9mlgQO/1+szrz7MDE=</saml2p:Artifact>
+</saml2p:ArtifactResolve>

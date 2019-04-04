@@ -1,0 +1,17 @@
+# Keystore used when signing SAML messages and metadata
+keyStoreType = <%= @key_store['storetype'] %>
+keyStorePassword = <%= @key_store['password'] %>
+keyStorePath = file:<%= @config_dir %><%= @application %>/<%= @key_store['name'] %>
+issuer = <%= @key_store['issuer'] %>
+serialNumber = <%= @key_store['serialNumber'] %>
+keyPassword = <%= @key_store['keyPassword'] %>
+<% if !(@security_providers.empty?) %>securityProviders = <%= @security_providers %><%="\n"%><% end -%>
+
+# Trust store used when verifying signed SAML messages
+trustStoreType = <%= @trust_store['storetype'] %>
+trustStorePassword = <%= @trust_store['password'] %>
+trustStorePath = <%= @config_dir %><%= @application %>/<%= @trust_store['name'] %>
+
+# Certificate validation strictness
+check_certificate_validity_period=false
+disallow_self_signed_certificate=false

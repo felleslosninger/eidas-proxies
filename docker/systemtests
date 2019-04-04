@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+run() {
+    deployStackName=eidas
+    deployHostName=localhost
+    adminPort=$(getPort ${deployStackName} 'idporten-admin')
+    idpPort=$(getPort ${deployStackName} 'idporten-openam')
+    seleniumPort=$(getPort ${deployStackName} 'selenium')
+    dbPort=$(getPort ${deployStackName} 'kontaktregister-db')
+
+    mvn verify -pl system-tests -PsystemTests -B\
+    -DadminDirectBaseURL=http://${deployHostName}:$(trim "${adminPort}")/idporten-admin/\
+    -DminIDOnTheFlyUrl=http://${deployHostName}:${idpPort}/minid_filegateway/\
+    -DseleniumUrl=http://${deployHostName}:${seleniumPort}/wd/hub\
+    -DdatabaseUrl=${deployHostName}:${dbPort} -X
+}
+
+trim() {
+  local var="$1"
+  var="${var#"${var%%[![:space:]]*}"}" # trim leading whitespace chars
+  var="${var%"${var##*[![:space:]]}"}" # trim trailing whitespace chars
+  echo -n "$var"
+}
+
+getPort() {
+    [[ $# -eq 2 ]] || { >&2 echo "Usage: $0 $FUNCNAME STACK SERVICE "; return 13; }
+    stackName=$1
+    service=$2
+    docker service inspect --format='{{with index .Endpoint.Ports 0}}{{.PublishedPort}}{{end}}' ${stackName}_${service} || return 14
+}
+
+run ${@}
