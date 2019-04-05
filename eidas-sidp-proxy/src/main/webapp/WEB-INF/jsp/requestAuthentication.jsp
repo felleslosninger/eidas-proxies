@@ -16,6 +16,7 @@
             <form:form method="post" action="authRedir" autocomplete="off">
                 <fieldset>
                     <div class="fm-Fields">
+                        <p class="warning"><spring:message code="eidas-proxy.select_country.legal"/></p>
                         <p class="legend-Style"><spring:message code="eidas-proxy.select_country.info"/></p>
 
                         <div class="cs-InputContainer">
