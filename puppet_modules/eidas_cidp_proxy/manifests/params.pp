@@ -20,7 +20,7 @@ class eidas_cidp_proxy::params {
   $dsf_gateway_retry_count                = 2
   $mf_gateway_timeout                     = 10000
   $mf_gateway_retry_count                 = 2
-  $log_level                              = 'DEBUG'
+  $log_level                              = 'WARN'
   $auditlog_dir                           = '/var/log/eidas-cidp-proxy/audit/'
   $auditlog_file                          = 'audit.log'
   $eidas_cidp_proxy_dummy_enabled         = false

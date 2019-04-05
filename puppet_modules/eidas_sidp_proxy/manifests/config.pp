@@ -6,6 +6,10 @@ class eidas_sidp_proxy::config inherits eidas_sidp_proxy{
     group   => $eidas_sidp_proxy::service_name,
     owner   => $eidas_sidp_proxy::service_name,
     mode    => '0644',
+  }->
+  file { "/etc/rc.d/init.d/${eidas_sidp_proxy::service_name}":
+    ensure => 'link',
+    target => "${eidas_sidp_proxy::install_dir}${eidas_sidp_proxy::application}/${eidas_sidp_proxy::artifact_id}.war",
   }
   file { "${eidas_sidp_proxy::config_dir}${eidas_sidp_proxy::application}/SamlEngine.xml":
     ensure  => 'file',

@@ -50,6 +50,10 @@ class eidas_cidp_proxy::config inherits eidas_cidp_proxy{
     group   => $eidas_cidp_proxy::service_name,
     owner   => $eidas_cidp_proxy::service_name,
     mode    => '0644',
+  }->
+  file { "/etc/rc.d/init.d/${eidas_cidp_proxy::service_name}":
+    ensure => 'link',
+    target => "${eidas_cidp_proxy::install_dir}${eidas_cidp_proxy::application}/${eidas_cidp_proxy::artifact_id}.war",
   }
   file { "${eidas_cidp_proxy::config_dir}${eidas_cidp_proxy::application}/SignModule.properties":
     ensure  => 'file',

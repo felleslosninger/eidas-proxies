@@ -22,8 +22,8 @@ class eidas_sidp_proxy::params {
   $saml_instant_issue_time_to_live        = 300
   $saml_instant_issue_time_skew           = 60
   $saml_ip_address_validation             = false
-  $eidas_sidp_proxy_timeout               = 10000
-  $eidas_sidp_proxy_retry_count           = 2
+  $dsf_gateway_timeout                    = 10000
+  $dsf_gateway_retry_count                = 2
   $saml_requester                         = 'http://eid.difi.no.sid'
   $saml_responder                         = 'http://eid.difi.no.sid'
   $saml_check_certificate_validity_period = false
