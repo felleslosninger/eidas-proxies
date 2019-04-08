@@ -121,7 +121,6 @@
         <dependency>
             <groupId>no.difi.eidas</groupId>
             <artifactId>saml-engine-extensions</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>

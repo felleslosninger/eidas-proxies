@@ -19,7 +19,6 @@
         <module>idp-proxy-common</module>
         <module>eidas-sidp-proxy</module>
         <module>eidas-cidp-proxy</module>
-        <module>saml-engine-extensions</module>
         <module>system-tests</module>
     </modules>
 
@@ -43,6 +42,7 @@
         <xmltooling.version>1.4.4</xmltooling.version>
         <logstash.logback.version>5.2</logstash.logback.version>
         <eidas.version>1.4.1</eidas.version>
+        <saml-engine-extensions.version>2019-04-05-1306-9f64667</saml-engine-extensions.version>
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
         <resilience.version>2019-01-18-1311-9ea27ce</resilience.version>
         <tomcat.version>9.0.14</tomcat.version>
@@ -114,6 +114,11 @@
                 <groupId>no.difi.common</groupId>
                 <artifactId>resilience-util</artifactId>
                 <version>${resilience.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.difi.eidas</groupId>
+                <artifactId>saml-engine-extensions</artifactId>
+                <version>${saml-engine-extensions.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.difi.common</groupId>
