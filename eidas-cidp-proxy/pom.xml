@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>no.difi.eidas</groupId>
-        <artifactId>eidas</artifactId>
+        <artifactId>eidas-proxies</artifactId>
         <version>DEV-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
@@ -206,27 +206,14 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </testResource>
-        </testResources>
-
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
 
             <plugin>

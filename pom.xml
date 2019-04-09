@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.difi.eidas</groupId>
-    <artifactId>eidas</artifactId>
+    <artifactId>eidas-proxies</artifactId>
     <packaging>pom</packaging>
     <version>DEV-SNAPSHOT</version>
     <parent>
@@ -84,11 +84,6 @@
                 <artifactId>spring-boot-starter-tomcat</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>org.springframework.cloud</groupId>-->
-                <!--<artifactId>spring-cloud-starter-openfeign</artifactId>-->
-                <!--<version>${org.springframework.cloud}</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework.security.oauth</groupId>
                 <artifactId>spring-security-oauth2</artifactId>
@@ -342,22 +337,6 @@
         <!-- Default configuration for plugins used by (some) sub-projects. -->
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.3.1.v20150714</version>
-                    <configuration>
-                        <webApp>
-                            <extraClasspath>c:/etc/opt/eidas-sidp-proxy/</extraClasspath>
-                        </webApp>
-                        <httpConnector>
-                            <port>10000</port>
-                            <idleTimeout>60000</idleTimeout>
-                        </httpConnector>
-                        <scanIntervalSeconds>0</scanIntervalSeconds>
-                        <!--0 disables hotswapping of code-->
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>

@@ -62,8 +62,8 @@ class eidas_sidp_proxy::config inherits eidas_sidp_proxy{
   } ->
   difilib::logback_config { $eidas_sidp_proxy::application:
     application       => $eidas_sidp_proxy::application,
-    owner             => $minid_updater::service_name,
-    group             => $minid_updater::service_name,
+    owner             => $eidas_sidp_proxy::service_name,
+    group             => $eidas_sidp_proxy::service_name,
     resilience        => false,
     performance_class => '',
     loglevel_no       => $eidas_sidp_proxy::log_level,
