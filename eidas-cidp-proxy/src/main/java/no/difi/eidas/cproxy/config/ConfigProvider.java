@@ -70,6 +70,9 @@ public class ConfigProvider {
     private int mfGatewayTimeout;
     @Value("${mf.gateway.retryCount}")
     private int mfRetryCount;
+    @Value("${mf.gateway.enabled:false}")
+    private boolean mfGatewayEnabled;
+
     private MetadataProvider idpMetadataProvider;
     private MetadataProvider spMetadataProvider;
     private IDPSSODescriptor idpssoDescriptor;
@@ -161,6 +164,10 @@ public class ConfigProvider {
         } catch (Urls.UrlMalformed e) {
             throw new RuntimeException(String.format("Wrong format for URL: %s for %s", value, description), e);
         }
+    }
+
+    public boolean isMfGatewayEnabled() {
+        return mfGatewayEnabled;
     }
 
     protected String concatUrl(String base, String resource) {

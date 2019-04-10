@@ -18,8 +18,12 @@ eidas_cidp_proxy::oidc_client_id:                  'oidc_test_rp'
 eidas_cidp_proxy::oidc_client_secret:              'test'
 eidas_cidp_proxy::oidc_redirect_uri:                'https://eid-atest-web01.dmz.local/eidas-cidp-proxy/oidc/callback'
 
+# feature switch for using MF-Gateway instead of DSF
+eidas_cidp_proxy::mf_gateway_enabled:               false
+
 # temp config before update platform.yaml in puppet-hiera for ondemand
 mf::mf_gateway_url:                               'http://mf-gateway:8080'
+
 
 filebeat::prospectors:
   tomcat-access:

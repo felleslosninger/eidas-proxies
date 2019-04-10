@@ -1,0 +1,70 @@
+{
+    "identifikasjonsnummer": [
+        {
+            "ajourholdstidspunkt": "2019-02-07T16:03:19+01:00",
+            "erGjeldende": true,
+            "kilde": "dsf-folkeregister-synkronisering",
+            "gyldighetstidspunkt": "2019-02-07T00:00:00+01:00",
+            "status": "iBruk",
+            "foedselsEllerDNummer": "01104200113",
+            "identifikatortype": "foedselsnummer"
+        }
+    ],
+    "identitetsgrunnlag": [],
+    "deltBosted": [],
+    "familierelasjon": [],
+    "legitimasjonsdokument": [],
+    "utenlandskPersonidentifikasjon": [],
+    "utlendingsmyndighetenesIdentifikasjonsnummer": [],
+    "sivilstand": [],
+    "foedselINorge": [],
+    "kjoenn": [
+        {
+            "ajourholdstidspunkt": "2019-02-07T16:03:19+01:00",
+            "erGjeldende": true,
+            "kilde": "",
+            "aarsak": "Uregistrert person",
+            "gyldighetstidspunkt": "2019-02-07T00:00:00+01:00",
+            "kjoenn": "mann"
+        }
+    ],
+    "foedsel": [
+        {
+            "ajourholdstidspunkt": "2019-02-07T16:03:19+01:00",
+            "erGjeldende": true,
+            "kilde": "",
+            "aarsak": "Uregistrert person",
+            "gyldighetstidspunkt": "2019-02-07T00:00:00+01:00",
+            "foedselsdato": "1942-10-01",
+            "foedselsaar": "1942",
+            "foedested": "",
+            "foedeland": "ASM"
+        }
+    ],
+    "navn": [
+		{
+			"ajourholdstidspunkt": "2019-02-07T16:03:19+01:00",
+            "erGjeldende": true,
+            "kilde": "",
+            "aarsak": "Uregistrert person",
+            "gyldighetstidspunkt": "2019-02-07T00:00:00+01:00",
+			"etternavn": "Holm",
+			"fornavn": "Norman",
+			"mellomnavn": "Test",
+			"forkortetNavn": "Norman Test Holm",
+			"originaltNavn": "Homtest"
+		}
+	],
+    "adressebeskyttelse": [],
+    "kontaktinformasjonForDoedsbo": [],
+    "status": [
+        {
+            "ajourholdstidspunkt": "2019-02-07T16:03:19+01:00",
+            "erGjeldende": true,
+            "kilde": "",
+            "aarsak": "Uregistrert person",
+            "gyldighetstidspunkt": "2019-02-07T16:03:19+01:00",
+            "status": "ikkeBosatt"
+        }
+    ]
+}

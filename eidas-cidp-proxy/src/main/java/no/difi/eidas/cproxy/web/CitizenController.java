@@ -6,6 +6,7 @@ import eu.eidas.auth.commons.attribute.AttributeValueMarshallingException;
 import eu.eidas.auth.commons.protocol.IAuthenticationRequest;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
 import eu.eidas.engine.exceptions.EIDASSAMLEngineException;
+import no.difi.eidas.cproxy.config.ConfigProvider;
 import no.difi.eidas.cproxy.config.OIDCProperties;
 import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.authentication.ConsentHandler;
@@ -14,6 +15,7 @@ import no.difi.eidas.cproxy.domain.node.NodeAttribute;
 import no.difi.eidas.cproxy.integration.idporten.NodeAttributeAssembler;
 import no.difi.eidas.cproxy.domain.node.NodeAuthnRequest;
 import no.difi.eidas.cproxy.integration.idporten.ResponseData;
+import no.difi.eidas.cproxy.integration.mf.MFService;
 import no.difi.eidas.cproxy.integration.node.NodeRequestParser;
 import no.difi.eidas.cproxy.integration.node.NodeResponseGenerator;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
@@ -66,6 +68,8 @@ public class CitizenController {
     private final LogoutHandler logoutHandler;
     private final ConsentHandler consentHandler;
     private final OIDCProperties oidcProperties;
+    private final MFService mfService;
+    private final ConfigProvider configProvider;
 
     @Autowired
     public CitizenController(
@@ -78,7 +82,9 @@ public class CitizenController {
             NodeResponseGenerator nodeResponseGenerator,
             LogoutHandler logoutHandler,
             ConsentHandler consentHandler,
-            OIDCProperties oidcProperties) {
+            OIDCProperties oidcProperties,
+            MFService mfService,
+            ConfigProvider configProvider) {
         this.idPortenAuthnRequestBuilder = idPortenAuthnRequestCreator;
         this.nodeAttributeAssembler = nodeAttributeAssembler;
         this.idpAuthnResponseResolver = idpAuthnResponseResolver;
@@ -89,6 +95,8 @@ public class CitizenController {
         this.logoutHandler = logoutHandler;
         this.consentHandler = consentHandler;
         this.oidcProperties = oidcProperties;
+        this.mfService = mfService;
+        this.configProvider = configProvider;
     }
 
     /**
@@ -131,7 +139,8 @@ public class CitizenController {
 
         session.setAttribute(IdportenSession.IDPORTEN_SESSION_ATTRIBUTE, new IdportenSession(idPAuthnResponse.nameId(), idPAuthnResponse.sessionIndex()));
         AuthenticationContext context = authenticationContext(session);
-        context.assembledAttributes(nodeAttributeAssembler.assembleAttributes(context, new ResponseData(idPAuthnResponse, findPerson(idPAuthnResponse.uid()).orNull())));
+        Person person = findPerson(idPAuthnResponse.uid()).orNull();
+        context.assembledAttributes(nodeAttributeAssembler.assembleAttributes(context, new ResponseData(idPAuthnResponse, person)));
         context.levelOfAssurance(levelOfAssurance(idPAuthnResponse.securityLevel()));
 
         return validateAttributes(session);
@@ -156,10 +165,29 @@ public class CitizenController {
     }
 
     private Optional<Person> findPerson(String uid) {
+        if (configProvider.isMfGatewayEnabled()) {
+            return findMFPerson(uid);
+        } else {
+            return findDSFPerson(uid);
+        }
+    }
+
+    private Optional<Person> findDSFPerson(String uid) {
         PersonLookupResult result = dsfService.bySsn(uid);
-        if (result.status().equals(PersonLookupResult.Status.OK))
+        if (result.status().equals(PersonLookupResult.Status.OK)) {
             return result.person();
-        return Optional.absent();
+        } else {
+            return Optional.absent();
+        }
+    }
+
+    private Optional<Person> findMFPerson(String uid) {
+        PersonLookupResult result = mfService.lookup(uid);
+        if (result.status().equals(PersonLookupResult.Status.OK)) {
+            return result.person();
+        } else {
+            return Optional.absent();
+        }
     }
 
     private void setLocale(HttpServletRequest request, HttpServletResponse response, IdPAuthnResponse idPAuthnResponse) {

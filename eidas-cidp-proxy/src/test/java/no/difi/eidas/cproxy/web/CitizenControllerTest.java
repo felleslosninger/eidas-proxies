@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import eu.eidas.auth.commons.protocol.eidas.IEidasAuthenticationRequest;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
 import no.difi.eidas.cproxy.TestData;
+import no.difi.eidas.cproxy.config.ConfigProvider;
 import no.difi.eidas.cproxy.config.OIDCProperties;
 import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.authentication.ConsentHandler;
@@ -16,6 +17,7 @@ import no.difi.eidas.cproxy.domain.node.NodeAttributes;
 import no.difi.eidas.cproxy.domain.node.NodeAuthnRequest;
 import no.difi.eidas.cproxy.integration.idporten.NodeAttributeAssembler;
 import no.difi.eidas.cproxy.integration.idporten.ResponseData;
+import no.difi.eidas.cproxy.integration.mf.MFService;
 import no.difi.eidas.cproxy.integration.node.NodeRequestParser;
 import no.difi.eidas.cproxy.integration.node.NodeResponseGenerator;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
@@ -82,6 +84,8 @@ public class CitizenControllerTest extends TestData{
     @Mock
     private DsfGateway dsfGateway;
     @Mock
+    private MFService mfService;
+    @Mock
     private NodeResponseGenerator nodeResponseGenerator;
     @Mock
     private LocaleResolver localeResolver;
@@ -91,6 +95,8 @@ public class CitizenControllerTest extends TestData{
     private CitizenController controller;
     @Mock
     private IEidasAuthenticationRequest eidasRequestMock;
+    @Mock
+    private ConfigProvider configProvider;
 
     private MockMvc mockMvc;
 
@@ -197,6 +203,42 @@ public class CitizenControllerTest extends TestData{
         assertNotNull(session.getAttribute(IdportenSession.IDPORTEN_SESSION_ATTRIBUTE));
     }
 
+
+    @Test
+    public void whenMFServiceIsEnabledUseMFService() throws Exception {
+        // Given
+        NodeAttributes expectedAttributes = NodeAttributes.builder().build();
+        IdPAuthnResponse mockAuthnResponse = Mockito.mock(IdPAuthnResponse.class);
+        when(artifactResolver.resolve(anyString())).thenReturn(mockAuthnResponse);
+        when(nodeAttributeAssembler.assembleAttributes(any(AuthenticationContext.class), any(ResponseData.class))).thenReturn(expectedAttributes);
+        String uid = "uid";
+        when(mockAuthnResponse.uid()).thenReturn(uid);
+        when(mfService.lookup(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
+        when(mockAuthnResponse.securityLevel()).thenReturn("3");
+        when(configProvider.isMfGatewayEnabled()).thenReturn(true);
+
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                get("/idportenResponse")
+                        .param("SAMLart", "dummySAMLArtifact")
+                        .accept(MediaType.ALL)
+        );
+
+        // Then
+        HttpSession session = resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name("showAttributeConsent"))
+                .andReturn().getRequest().getSession();
+        AuthenticationContext authenticationContext = (AuthenticationContext)
+                session.getAttribute("authenticationContext");
+        assertEquals(
+                expectedAttributes,
+                authenticationContext.assembledAttributes()
+        );
+        assertNotNull(session.getAttribute(IdportenSession.IDPORTEN_SESSION_ATTRIBUTE));
+
+    }
+
     @Test
     @Ignore
     public void whenHandlingIdPortenResponseWithKnownCultureThenLocaleIsSetAccordingly() throws Exception {
@@ -277,6 +319,7 @@ public class CitizenControllerTest extends TestData{
         when(artifactResolver.resolve(anyString())).thenReturn(mockAuthnResponse);
         when(nodeAttributeAssembler.assembleAttributes(any(AuthenticationContext.class), any(ResponseData.class))).thenReturn(expectedAttributes);
         when(dsfGateway.bySsn(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
+        when(configProvider.isMfGatewayEnabled()).thenReturn(false);
 
         // When
         ResultActions resultActions = mockMvc.perform(

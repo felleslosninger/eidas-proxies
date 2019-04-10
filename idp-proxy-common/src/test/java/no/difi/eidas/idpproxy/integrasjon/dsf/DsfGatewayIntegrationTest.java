@@ -1,7 +1,7 @@
 package no.difi.eidas.idpproxy.integrasjon.dsf;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import no.difi.eidas.idpproxy.ResourceReader;
+import no.difi.eidas.idpproxy.test.ResourceReader;
 import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
@@ -30,35 +30,35 @@ public class DsfGatewayIntegrationTest {
     public WireMockRule wireMockRule = new WireMockRule(port);
 
     @Test
-    public void bySsn() throws Exception {
+    public void bySsn() {
         stubFor(get(urlEqualTo(String.format("/%s/dsf/%s", contextPath, ssn)))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Client-Id", equalTo(clientId))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(ResourceReader.dsfGatewayResponse())));
+                        .withBody(ResourceReader.read("dsfGatewayResponse.json"))));
         assertPersonSuccessfullyFound(
                 dsfGateway().bySsn(ssn)
         );
     }
 
     @Test
-    public void byNameAndBirth() throws Exception {
+    public void byNameAndBirth() {
         stubFor(get(urlEqualTo(String.format("/%s/dsf/%s/%s/%s", contextPath, firstName, lastName, birth)))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Client-Id", equalTo(clientId))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(ResourceReader.dsfGatewayResponse())));
+                        .withBody(ResourceReader.read("dsfGatewayResponse.json"))));
         assertPersonSuccessfullyFound(
                 dsfGateway().byNameAndBirth(firstName, lastName, birth)
         );
     }
 
     @Test
-    public void errorResponseOnTimeoutBySsn() throws Exception {
+    public void errorResponseOnTimeoutBySsn() {
         PersonLookupResult result = new DsfGatewayBuilder(
                 url("http://" + host + ":" + port + "/" + contextPath),
                 clientId,
@@ -68,7 +68,7 @@ public class DsfGatewayIntegrationTest {
     }
 
     @Test
-    public void errorResponseOnTimeoutByName() throws Exception {
+    public void errorResponseOnTimeoutByName() {
         PersonLookupResult result = new DsfGatewayBuilder(
                 url("http://" + host + ":" + port + "/" + contextPath),
                 clientId,

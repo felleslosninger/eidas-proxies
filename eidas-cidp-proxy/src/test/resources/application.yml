@@ -33,6 +33,7 @@ mf:
         retryCount: 1
         timeout: 5000
         url: http://mf-gateway
+        enabled: false
 saml:
     idp:
         entityid: vagrant-idp
