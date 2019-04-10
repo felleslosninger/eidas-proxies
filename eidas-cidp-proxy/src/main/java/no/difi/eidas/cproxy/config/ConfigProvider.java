@@ -70,6 +70,8 @@ public class ConfigProvider {
     private int mfGatewayTimeout;
     @Value("${mf.gateway.retryCount}")
     private int mfRetryCount;
+    @Value("${message.path}")
+    private String messagePath;
     @Value("${mf.gateway.enabled:false}")
     private boolean mfGatewayEnabled;
 
@@ -266,6 +268,10 @@ public class ConfigProvider {
     
     public String getIDPSingleLogoutService(){
     	return SAMLUtil.resolveIDPSingleSignoutLocation(getIDPSSODescriptor());
+    }
+
+    public String getMessagePath(){
+        return messagePath;
     }
 
 }

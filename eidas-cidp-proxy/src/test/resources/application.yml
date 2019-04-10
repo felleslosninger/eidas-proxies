@@ -60,9 +60,21 @@ oidc:
         secret: test
     redirectUri: http://localhost/oidc/callback
     enable: true
+
 users:
     test: 19890605.CE/NO/05061989:05068907693
+
 samlengine:
-    path: test
-message:
     path:
+
+message:
+    path: ''
+
+spring:
+    main:
+        allow-bean-definition-overriding: true
+
+
+
+
+

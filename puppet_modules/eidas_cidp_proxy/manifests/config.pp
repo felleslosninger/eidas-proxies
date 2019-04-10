@@ -1,12 +1,5 @@
 class eidas_cidp_proxy::config inherits eidas_cidp_proxy{
 
-  file { "${eidas_cidp_proxy::config_dir}${eidas_cidp_proxy::application}/eidas-cidp-proxy.properties":
-    ensure  => 'file',
-    content => template("${module_name}/eidas-cidp-proxy.properties.erb"),
-    group   => $eidas_cidp_proxy::service_name,
-    owner   => $eidas_cidp_proxy::service_name,
-    mode    => '0644',
-  } ->
   difilib::logback_config { $eidas_cidp_proxy::application:
     application       => $eidas_cidp_proxy::application,
     owner             => $eidas_cidp_proxy::service_name,

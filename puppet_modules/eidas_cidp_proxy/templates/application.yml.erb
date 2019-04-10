@@ -55,17 +55,16 @@ messages:
 
 dsf:
   gateway:
-    url: <%= @dsf_gateway_url %>
-    connectTimeout: <%= @dsf_gateway_timeout %>
-    readTimeout: 1000
     retryCount: <%= @dsf_gateway_retry_count %>
+    timeout: <%= @dsf_gateway_timeout %>
+    url: <%= @dsf_gateway_url %>
 
 mf:
   gateway:
     url: <%= @mf_gateway_url %>
     timeout: <%= @mf_gateway_timeout %>
     retryCount: <%= @mf_gateway_retry_count %>
-    enabled: false
+    enabled: <%= @mf_gateway_enabled %>
 
 saml:
   instantIssueTimeToLive: <%= @saml_instant_issue_time_to_live %>
@@ -95,7 +94,14 @@ oidc:
     id: <%= @oidc_client_id %>
     secret: <%= @oidc_client_secret %>
   redirectUri: <%= @oidc_redirect_uri %>
+
 samlengine:
   path: <%= @config_dir %><%= @application %>/
+
+#users:
+#  test: CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693
+
 message:
   path: file:<%= @config_dir %><%= @application %>
+
+

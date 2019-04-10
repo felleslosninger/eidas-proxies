@@ -16,16 +16,6 @@ management:
       show-details: always
       enabled: true
 
-## Generic application config
-audit:
-  logDir: c:/var/log/eidas-cidp-proxy
-  logFile: audit2.log
-
-event:
-  jmsUrl: tcp://eid-systest-admin01.dmz.local:61616
-  jmsQueue: logqueue
-
-
 ## Tomcat access log
 server:
   port: 8081
@@ -55,14 +45,49 @@ messages:
   cache:
     seconds: "-1"
 
+## Generic application config
+auditlog:
+  dataSeparator: '|'
+  dir: c:\var\log\eidas-proxy
+  file: audit.log
+
+client:
+  id: IdpProxy
 dsf:
   gateway:
-    url: http://eid-systest-admin01.dmz.local:10009/dsf-gateway/
-    connectTimeout: 5000
-    readTimeout: 1000
-
+    retryCount: 1
+    timeout: 5000
+    url: http://eid-vag-admin:10009/dsf-gateway
+eidas-node:
+  url: http://localhost/EidasNode/ServiceProvider
+eventlog:
+  jms:
+    queuename: q
+    url: tcp://localhost:9999
+fileconfig:
+  countriesAttributes: /etc/opt/eidas-sidp-proxy/countriesAttributes.json
+  readPeriod: 60000
+idporten:
+  keystore:
+    alias: selfsigned
+    location: idPortenKeystore.jks
+    password: password
+    privatekeyPassword: password
+    type: jks
 mf:
   gateway:
-    url: http://localhost/mf-gateway
-    timeout: 5000
     retryCount: 1
+    timeout: 5000
+    url: http://localhost/mf-gateway
+saml:
+  idp:
+    entityName: eidas-proxy-idp
+  instantIssueTimeSkew: 2
+  instantIssueTimeToLive: 10000000
+sidp-proxy:
+  url: http://eid-vag-opensso.difi.local:10008/eidas-sidp-proxy/
+users:
+  test: CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693
+
+message:
+  path:

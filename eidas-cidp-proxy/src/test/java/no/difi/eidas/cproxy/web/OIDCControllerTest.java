@@ -1,102 +1,49 @@
 package no.difi.eidas.cproxy.web;
 
 
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
+import no.difi.eidas.cproxy.AbstractBaseTest;
 import no.difi.eidas.cproxy.OIDCTestKeyProvider;
 import no.difi.eidas.cproxy.config.OIDCProperties;
-import no.difi.eidas.cproxy.config.SpringConfig;
 import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.node.NodeAuthnRequest;
 import no.difi.eidas.cproxy.domain.node.NodeRequestedAttributes;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPublicKey;
 import java.time.Clock;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes={OIDCControllerTest.Config.class})
-public class OIDCControllerTest {
-
-    @Import(SpringConfig.class)
-    @Configuration
-    public static class Config {
-
-        @Bean
-        @Primary
-        public RestTemplate restTemplate(@Value("${oidc.issuerUri}") String issuerUri) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, URISyntaxException {
-            RestTemplate restTemplate = mock(RestTemplate.class);
-            String jwk = OIDCTestKeyProvider.getJWSJSON();
-            when(restTemplate.getForObject(
-                    eq(new URI("https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/jwk")),
-                    eq(String.class)))
-                    .thenReturn(jwk);
-            when(restTemplate.getForObject(
-                    eq(issuerUri + "/.well-known/openid-configuration"),
-                    eq(String.class)))
-            .thenReturn("{\"issuer\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/\",\"authorization_endpoint\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/authorize\",\"token_endpoint\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/token\",\"end_session_endpoint\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/endsession\",\"revocation_endpoint\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/revoke\",\"jwks_uri\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/jwk\",\"response_types_supported\":[\"code\"],\"subject_types_supported\":[\"pairwise\"],\"userinfo_endpoint\":\"https://eid-test-oidc-provider.difi.no/idporten-oidc-provider/userinfo\",\"scopes_supported\":[\"openid\",\"profile\"],\"ui_locales_supported\":[\"nb\",\"nn\",\"en\",\"se\"]}");
-
-            return restTemplate;
-        }
-
-
-    }
-
-    @Autowired
-    private WebApplicationContext context;
+@AbstractBaseTest.EidasCproxyTest
+public class OIDCControllerTest extends AbstractBaseTest {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -104,15 +51,13 @@ public class OIDCControllerTest {
     @Autowired
     private OIDCProperties properties;
 
+    @Autowired
     private MockMvc mvc;
 
     private String nonce;
 
     @Before
     public void setup() {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .build();
         when(restTemplate.exchange(
                 eq(properties.getMetadata().getTokenEndpointURI()),
                 eq(HttpMethod.POST),
