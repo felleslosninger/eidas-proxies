@@ -35,6 +35,12 @@ class eidas_sidp_proxy::install inherits eidas_sidp_proxy {
     mode   => '0644',
     owner  => $eidas_sidp_proxy::service_name,
     group  => $eidas_sidp_proxy::service_name,
+  } ->
+  file { $eidas_sidp_proxy::tomcat_tmp_dir:
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => $eidas_sidp_proxy::service_name,
+    group  => $eidas_sidp_proxy::service_name,
   }
   difilib::spring_boot_logrotate { $eidas_sidp_proxy::application:
     application => $eidas_sidp_proxy::application,
