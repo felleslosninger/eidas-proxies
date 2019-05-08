@@ -37,6 +37,8 @@ public class MFService {
     private static final String MF_PARAM_LANDKODE = "landkode";
     private static final String MF_PARAM_UTENLANDSK_ID = "utenlandskPersonIdentifikasjon";
 
+    private static final String GENERAL_PID_REGEX = ".*\\/.*\\/(.*)";
+
     private final AttributesConfigProvider attributesConfigProvider;
     private final ObjectFactory<AuthState> authStateObjectFactory;
     private final ConfigProvider configProvider;
@@ -79,7 +81,9 @@ public class MFService {
                         Optional.of(Person.builder().fødselsnummer(norskPersonIdentifikator).build()));
             } else {
                 // Test users mock, property must be empty in hiera in production to avoid using the mock.
-                norskPersonIdentifikator = configProvider.eIDASIdentifierDnumbers().get(foedselsdato + "." + personIdentifikator);
+                log.debug("Leter i mock-eidasId: key = -" + personIdentifikator + "-");
+                norskPersonIdentifikator = configProvider.eIDASIdentifierDnumbers().get(personIdentifikator);
+                log.debug("Fant identifikator? " + (norskPersonIdentifikator != null));
                 log.warn("Use person from test mock: " + norskPersonIdentifikator + " found based on " + foedselsdato + "." + personIdentifikator);
                 if (norskPersonIdentifikator != null) {
                     return new PersonLookupResult(
@@ -129,10 +133,11 @@ public class MFService {
             return null;
         }
 
-        if (extractionConfig.regex != null) {
-            return getPidFromCountryRegex(extractionConfig.regex, countryCode, personIdentifikator);
+        if (extractionConfig.regex == null) {
+            String eidasId = getPidFromCountryRegex(GENERAL_PID_REGEX, "general regex", personIdentifikator);
+            return eidasId == null ? personIdentifikator : eidasId;
         } else {
-            return personIdentifikator;
+            return getPidFromCountryRegex(extractionConfig.regex, countryCode, personIdentifikator);
         }
     }
 

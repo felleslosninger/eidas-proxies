@@ -1,6 +1,8 @@
 package no.difi.eidas.sproxy.config;
 
 import no.difi.eidas.idpproxy.integrasjon.Urls;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +10,9 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 @Component
 public class ConfigProvider {
@@ -63,6 +68,8 @@ public class ConfigProvider {
     private String jmsUrl;
     @Value("${users.test:CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693}")
     private String eIDASIdentifierDnumbers;
+
+    private static final Logger log = LoggerFactory.getLogger(ConfigProvider.class);
 
     public Map<String, String> eIDASIdentifierDnumbers() {
         return parseTestUsers(eIDASIdentifierDnumbers);
@@ -183,8 +190,23 @@ public class ConfigProvider {
                 continue;
             }
             String[] split = entry.split(":");
-            map.put(split[0], split[1]);
+            String eidasIdentifikator = getStrippedEidasIdentifikator(split[0]);
+            log.debug("Testuser: key: -" + eidasIdentifikator + "- value: " + split[1]);
+            map.put(eidasIdentifikator, split[1]);
         }
         return map;
+    }
+
+    private String getStrippedEidasIdentifikator(String personIdentifikator) {
+        try {
+            String regex = ".*\\/.*\\/(.*)";
+            Matcher matcher = Pattern.compile(regex).matcher(personIdentifikator);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        } catch (PatternSyntaxException e) {
+            log.warn(String.format("Regex for mock eidas identifier is invalid"), e);
+        }
+        return null;
     }
 }

@@ -32,6 +32,8 @@ public class MFServiceTest {
 
     private static final String TEST_PID = "05068907693";
     private static final String TEST_EIDAS_PERSON_IDENTIFIER = "CE/NO/05061989";
+    private static final String TEST_SHORT_EIDAS_PERSON_IDENTIFIER = "05061989";
+    private static final String TEST_SHORT_CHARACTER_EIDAS_PERSON_IDENTIFIER = "UTENLANDSK_IDENTIFIKASJONS_NUMMER";
     private static final String EIDAS_PERSON_IDENTIFIER_ATTRIBUTE_NAME = "PersonIdentifier";
     private static final String MF_URL = "http://localhost:8080/eidas/entydig";
     @Mock
@@ -73,7 +75,7 @@ public class MFServiceTest {
     @Test
     public void noCountryConfigWithMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.empty());
-        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
+        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
         when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", TEST_EIDAS_PERSON_IDENTIFIER);
@@ -103,11 +105,28 @@ public class MFServiceTest {
 
     @Test
     public void countryConfigWithNoSpecialExtractionRulesMatchTest() {
+        countryConfigWithGivenEidasIdTest(TEST_EIDAS_PERSON_IDENTIFIER,
+                "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989");
+    }
+
+    @Test
+    public void countryConfigWithShortEidasIdTest() {
+        countryConfigWithGivenEidasIdTest(TEST_SHORT_EIDAS_PERSON_IDENTIFIER,
+                "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989");
+    }
+
+    @Test
+    public void countryConfigWithShortEidasIdentifikator() {
+        countryConfigWithGivenEidasIdTest(TEST_SHORT_CHARACTER_EIDAS_PERSON_IDENTIFIER,
+                "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=UTENLANDSK_IDENTIFIKASJONS_NUMMER");
+    }
+
+    public void countryConfigWithGivenEidasIdTest(String eidasIdentifikator, String url) {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, null, null, null)));
-        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
+        String expectedUrl = MF_URL + url;
         when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("PersonIdentifier", TEST_EIDAS_PERSON_IDENTIFIER);
+        attributes.put("PersonIdentifier", eidasIdentifikator);
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
                 .attributes(attributes)
                 .build();
@@ -136,7 +155,7 @@ public class MFServiceTest {
     @Test
     public void countryConfigWithExtractionAttributeNullFallbackMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
-        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
+        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
         when(restTemplate.getForObject(expectedUrl, String.class))
                 .thenReturn(TEST_PID);
         Map<String, String> attributes = new HashMap<>();
@@ -167,10 +186,9 @@ public class MFServiceTest {
     }
 
     @Test
-    //TODO
     public void countryConfigWithExtractionAttributeMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
-        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
+        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
         when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
 
         Map<String, String> attributes = new HashMap<>();
