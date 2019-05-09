@@ -99,7 +99,7 @@ public class MFService {
     /**
      * Based on xsd:date i.e. YYYY-MM-DD format.
      * eu.eidas.auth.engine.core.eidas.spec.NaturalPersonSpec
-     *
+     * <p>
      * Eidas has dates of format yyyy-MM-dd.
      * MF has format yyyyMMdd.
      *

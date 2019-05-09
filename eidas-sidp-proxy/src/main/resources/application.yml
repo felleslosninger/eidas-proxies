@@ -93,7 +93,7 @@ saml:
 sidp-proxy:
   url: http://eid-vag-opensso.difi.local:10008/eidas-sidp-proxy/
 users:
-  test: CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693
+  test: 19890650.CE/NO/05061989:05068907693
 samlengine:
   path:
 message:

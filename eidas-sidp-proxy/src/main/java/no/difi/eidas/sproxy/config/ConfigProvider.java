@@ -66,7 +66,7 @@ public class ConfigProvider {
     private String jmsQueueName;
     @Value("${eventlog.jms.url}")
     private String jmsUrl;
-    @Value("${users.test:CE/NO/05061989.UTENLANDSK_IDENTIFIKASJONS_NUMMER:05068907693}")
+    @Value("${users.test:19890605.CE/NO/05061989:05068907693}")
     private String eIDASIdentifierDnumbers;
 
     private static final Logger log = LoggerFactory.getLogger(ConfigProvider.class);
@@ -183,7 +183,7 @@ public class ConfigProvider {
         return new File(name);
     }
 
-    private Map<String,String> parseTestUsers(String testUsers) {
+    protected Map<String,String> parseTestUsers(String testUsers) {
         Map<String,String> map = new HashMap<>();
         for (String entry: testUsers.split(",")) {
             if (entry.length() == 0) {

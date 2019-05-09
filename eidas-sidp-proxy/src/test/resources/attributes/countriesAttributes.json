@@ -23,7 +23,7 @@
       "countryName": "Sweden",
       "pidAttributeName": "PID",
       "pidType": "UTLENDINGSMYNDIGHETENES_IDENTIFIKASJONS_NUMMER",
-      "regex": "*",
+      "regex": "(.*)",
       "attributes": [
         {
           "name": "PlaceOfBirth",
@@ -34,6 +34,14 @@
           "required": false
         }
       ]
+    },
+    {
+      "countryCode": "IT",
+      "countryName": "Italy",
+      "attributes": [{"name": "TaxReference", "required": true}],
+      "pidAttributeName": "TaxReference",
+      "pidType": null,
+      "regex": "(.*)"
     }
   ]
 }

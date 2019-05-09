@@ -26,8 +26,14 @@ public class ConfigParsingTest {
         assertThat(attributes.defaultAttributes().get(3).name(), is(equalTo("PersonIdentifier")));
         assertThat(attributes.defaultAttributes().get(3).required(), is(true));
 
-        assertThat(attributes.countries().size(), is(1));
+        assertThat(attributes.countries().size(), is(2));
         assertThat(attributes.countries().get(0).countryCode().toString(), is(equalTo("se")));
         assertThat(attributes.countries().get(0).countryName(), is(equalTo("Sweden")));
+
+        assertThat(attributes.countries().get(1).countryCode().toString(), is(equalTo("IT")));
+        assertThat(attributes.countries().get(1).countryName(), is(equalTo("Italy")));
+        assertThat(attributes.countries().get(1).attributes().size(), is(1));
+        assertThat(attributes.countries().get(1).attributes().get(0).name(), is(equalTo("TaxReference")));
+        assertThat(attributes.countries().get(1).getRegex(), is(equalTo("(.*)")));
     }
 }
