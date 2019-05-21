@@ -63,7 +63,7 @@ public class EidasResponseReceiver {
             logger.error("EidasSamlResponse: " + eidasSamlResponse.encoded());
             logger.error("EidasSamlResponse litt decodet: " + new String(EidasStringUtil.decodeBytesFromBase64(eidasSamlResponse.encoded()), StandardCharsets.UTF_8));
             logger.error("idportenAuthRequest: " + (idPortenAuthnRequest.xml() == null ? "xml null" : idPortenAuthnRequest.xml().toString()));
-            CorrelatedResponse response = (CorrelatedResponse) engine.unmarshallResponse(eidasSamlResponse.samlXml().toString().getBytes());
+            CorrelatedResponse response = (CorrelatedResponse) engine.unmarshallResponse(eidasSamlResponse.samlXml().toString().getBytes(StandardCharsets.UTF_8));
             auditLog.eidasSamlResponse(response.getResponse());
             IAuthenticationResponse authenticationResponse = engine.validateUnmarshalledResponse(response,
                             ipProvider.ip(),
