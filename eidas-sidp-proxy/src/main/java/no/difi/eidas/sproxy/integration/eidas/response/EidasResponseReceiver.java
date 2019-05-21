@@ -1,5 +1,6 @@
 package no.difi.eidas.sproxy.integration.eidas.response;
 
+import eu.eidas.auth.commons.EidasStringUtil;
 import eu.eidas.auth.commons.attribute.AttributeDefinition;
 import eu.eidas.auth.commons.protocol.IAuthenticationResponse;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -59,6 +61,7 @@ public class EidasResponseReceiver {
         try {
             logger.error("Tegnsett: " + Locale.getDefault());
             logger.error("EidasSamlResponse: " + eidasSamlResponse.encoded());
+            logger.error("EidasSamlResponse litt decodet: " + new String(EidasStringUtil.decodeBytesFromBase64(eidasSamlResponse.encoded()), StandardCharsets.UTF_8));
             logger.error("idportenAuthRequest: " + (idPortenAuthnRequest.xml() == null ? "xml null" : idPortenAuthnRequest.xml().toString()));
             CorrelatedResponse response = (CorrelatedResponse) engine.unmarshallResponse(eidasSamlResponse.samlXml().toString().getBytes());
             auditLog.eidasSamlResponse(response.getResponse());
