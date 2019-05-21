@@ -15,12 +15,15 @@ import no.difi.eidas.sproxy.domain.saml.SamlResponseXml;
 import org.opensaml.saml2.core.impl.ResponseMarshaller;
 import org.opensaml.xml.io.MarshallingException;
 import org.opensaml.xml.util.XMLHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,6 +31,7 @@ import static no.difi.eidas.sproxy.config.SpringConfig.EIDAS_ENGINE;
 
 @Service
 public class EidasResponseReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(EidasResponseReceiver.class);
     private final AuditLog auditLog;
     private final EventLog eventLog;
     private final ConfigProvider configProvider;
@@ -53,6 +57,9 @@ public class EidasResponseReceiver {
         Objects.requireNonNull(citizenCountryCode, "citizenCountryCode");
         Objects.requireNonNull(idPortenAuthnRequest, "idPortenSamlAuthnRequest");
         try {
+            logger.error("Tegnsett: " + Locale.getDefault());
+            logger.error("EidasSamlResponse: " + eidasSamlResponse.encoded());
+            logger.error("idportenAuthRequest: " + (idPortenAuthnRequest.xml() == null ? "xml null" : idPortenAuthnRequest.xml().toString()));
             CorrelatedResponse response = (CorrelatedResponse) engine.unmarshallResponse(eidasSamlResponse.samlXml().toString().getBytes());
             auditLog.eidasSamlResponse(response.getResponse());
             IAuthenticationResponse authenticationResponse = engine.validateUnmarshalledResponse(response,
