@@ -5,7 +5,7 @@ import no.difi.eidas.cproxy.domain.node.NodeAttributes;
 import no.difi.eidas.cproxy.domain.node.NodeAuthnRequest;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
 import no.idporten.domain.log.LogEntry;
-import no.idporten.domain.log.LogType;
+import no.idporten.domain.log.LogEntryLogType;
 import no.idporten.log.event.EventLogger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +47,7 @@ public class EventLogTest {
         NodeAttributes nodeAttributes = NodeAttributes.builder().available(SubjectBasicAttribute.PersonIdentifier, uid).build();
         eventLog.attributeConsentOk(nodeAuthnRequest, nodeAttributes);
 
-        verifyEventLogging(LogType.EIDAS_ATTRIBUTE_CONSENT_OK, uid, country, spInstituition);
+        verifyEventLogging(EventLog.EIDAS_ATTRIBUTE_CONSENT_OK, uid, country, spInstituition);
     }
 
     @Test
@@ -62,10 +62,10 @@ public class EventLogTest {
 
         eventLog.attributeConsentRejected(nodeAuthnRequest, nodeAttributes);
 
-        verifyEventLogging(LogType.EIDAS_ATTRIBUTE_CONSENT_REJECTED, uid, country, spApplication);
+        verifyEventLogging(EventLog.EIDAS_ATTRIBUTE_CONSENT_REJECTED, uid, country, spApplication);
     }
 
-    private void verifyEventLogging(LogType logType, String personIdentifikator, String issuer, String onBehalfOf) {
+    private void verifyEventLogging(LogEntryLogType logType, String personIdentifikator, String issuer, String onBehalfOf) {
         verify(eventLogger).log(logEntryArgumentCaptor.capture());
         LogEntry logEntry = logEntryArgumentCaptor.getValue();
         assertEquals(logType, logEntry.getLogType());

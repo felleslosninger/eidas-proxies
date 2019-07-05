@@ -18,7 +18,7 @@
         <xml-apis.version>1.4.01</xml-apis.version>
         <xercesImpl.version>2.11.0</xercesImpl.version>
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
-        <bcprov-jdk15.version>1.51</bcprov-jdk15.version>
+        <bcprov-jdk15.version>1.60</bcprov-jdk15.version>
         <asm-all.version>2.1</asm-all.version>
         <!-- TEST PROPERTIES -->
         <skip.integration.tests>true</skip.integration.tests>
@@ -62,12 +62,10 @@
         <dependency>
             <groupId>no.difi.common</groupId>
             <artifactId>resilience-util</artifactId>
-            <version>${resilience.version}</version>
         </dependency>
         <dependency>
             <groupId>no.difi.common</groupId>
             <artifactId>resilience-util-spring-boot-2</artifactId>
-            <version>${resilience.version}</version>
         </dependency>
         <dependency>
             <groupId>no.difi.common</groupId>

@@ -15,24 +15,13 @@ COPY /puppet_hiera/ /puppet/hiera/
 
 RUN /puppet/puppet-apply
 
-FROM openjdk:8-jdk-slim
-ENV TZ=Europe/Oslo
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone  # Setter timezone, utan dette kan nokre testar feile
-RUN apt-get update; apt-get install curl -y --allow-unauthenticated  # laster ned curl for å laste filebeat og køyre helsesjekk
-#installere filebeat
-RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.6.13-amd64.deb
-RUN dpkg -i filebeat-5.6.13-amd64.deb  #installerer filebeat
-RUN rm filebeat-5.6.13-amd64.deb
+FROM eid-jenkins02.dmz.local:8081/spring-boot-base:latest
 
 ARG APPLICATION=eidas-cidp-proxy
 ARG ARTIFACT_ID=eidas-cidp-proxy
 
 COPY --from=config /etc/filebeat/ /etc/filebeat/
 COPY --from=config /etc/opt/${APPLICATION}/ /etc/opt/${APPLICATION}/
-
-RUN mkdir /usr/local/webapps/
-ADD atest.pem /etc/ssl/certs/atest.pem
-RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 COPY /war/${ARTIFACT_ID}.war /usr/local/webapps/application.war
 COPY --from=config /opt/${APPLICATION}/${ARTIFACT_ID}.conf /usr/local/webapps/application.conf

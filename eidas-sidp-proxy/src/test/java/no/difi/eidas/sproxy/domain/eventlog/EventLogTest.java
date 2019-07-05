@@ -38,7 +38,7 @@ public class EventLogTest {
                 .build();
         eventLog.eidasResponse(eidasResponse, country);
         verify(eventLogger).log(logEntryArgumentCaptor.capture());
-        assertEquals(LogType.EIDAS_INCOMING_AUTHENTICATION, logEntryArgumentCaptor.getValue().getLogType());
+        assertEquals(EventLog.EIDAS_INCOMING_AUTHENTICATION, logEntryArgumentCaptor.getValue().getLogType());
         assertEquals(eidasEidentifier, logEntryArgumentCaptor.getValue().getPersonIdentifierString());
         assertEquals(country, logEntryArgumentCaptor.getValue().getIssuer());
         assertNull(logEntryArgumentCaptor.getValue().getOnBehalfOf());
