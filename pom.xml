@@ -38,6 +38,7 @@
         <saml-engine-extensions.version>2019-04-05-1306-9f64667</saml-engine-extensions.version>
         <eid.common.resilience.version>2019-06-27-1212-079df00</eid.common.resilience.version>
         <eid.common.version>2019-06-27-1343-fe81e6d</eid.common.version>
+        <cxf.version>3.3.2</cxf.version>
     </properties>
 
     <!-- Version management of common dependencies. -->
