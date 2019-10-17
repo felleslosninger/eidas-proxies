@@ -17,6 +17,24 @@ eidas_sidp_proxy::log_level:                      'DEBUG'
 #  }
 #]
 
+eidas_sidp_proxy::available_countries:
+  1:
+    countryName: 'Demo country CE'
+    countryCode: 'CE'
+    attributes:  ''
+  2:
+    countryName: 'Sweden'
+    countryCode: 'SE'
+    attributes:  ''
+  4:
+    countryName: 'Denmark'
+    countryCode: 'DK'
+    attributes:  ''
+  5:
+    countryName: 'Iceland'
+    countryCode: 'IS'
+    attributes:  ''
+
 # temp config before update platform.yaml in puppet-hiera for ondemand
 mf::mf_gateway_url:                               'http://mf-gateway:8080'
 # ********************************************************************************
