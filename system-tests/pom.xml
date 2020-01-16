@@ -17,9 +17,8 @@
         <dependency>
             <groupId>no.difi.cucumber</groupId>
             <artifactId>cucumber-test-multienv</artifactId>
-            <version>2019-02-27-1024-26f0574</version>
+            <version>2020-01-16-1029-398a863</version>
             <classifier>tests</classifier>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -2,10 +2,9 @@ class eidas_cidp_proxy (
 
   String $java_home                        = $eidas_cidp_proxy::params::java_home,
   Integer $server_port                     = $eidas_cidp_proxy::params::server_port,
-  String $dsf_gateway_url                  = $eidas_cidp_proxy::params::dsf_gateway_url,
-  Integer $dsf_gateway_timeout             = $eidas_cidp_proxy::params::dsf_gateway_timeout,
-  Integer $dsf_gateway_retry_count         = $eidas_cidp_proxy::params::dsf_gateway_retry_count,
   String $mf_gateway_url                   = $eidas_cidp_proxy::params::mf_gateway_url,
+  String $mf_gateway_username              = $eidas_cidp_proxy::params::mf_gateway_username,
+  String $mf_gateway_password              = $eidas_cidp_proxy::params::mf_gateway_password,
   Integer $mf_gateway_timeout              = $eidas_cidp_proxy::params::mf_gateway_timeout,
   Integer $mf_gateway_retry_count          = $eidas_cidp_proxy::params::mf_gateway_retry_count,
   Boolean $mf_gateway_enabled              = $eidas_cidp_proxy::params::mf_gateway_enabled,

@@ -12,14 +12,13 @@ import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.authentication.ConsentHandler;
 import no.difi.eidas.cproxy.domain.idp.*;
 import no.difi.eidas.cproxy.domain.node.NodeAttribute;
-import no.difi.eidas.cproxy.integration.idporten.NodeAttributeAssembler;
 import no.difi.eidas.cproxy.domain.node.NodeAuthnRequest;
+import no.difi.eidas.cproxy.integration.idporten.NodeAttributeAssembler;
 import no.difi.eidas.cproxy.integration.idporten.ResponseData;
 import no.difi.eidas.cproxy.integration.mf.MFService;
 import no.difi.eidas.cproxy.integration.node.NodeRequestParser;
 import no.difi.eidas.cproxy.integration.node.NodeResponseGenerator;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
-import no.difi.eidas.idpproxy.integrasjon.dsf.DsfGateway;
 import no.difi.eidas.idpproxy.integrasjon.dsf.Person;
 import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import org.opensaml.saml2.core.AuthnRequest;
@@ -62,14 +61,12 @@ public class CitizenController {
     private final NodeAttributeAssembler nodeAttributeAssembler;
     private final IdpArtifactResolver idpAuthnResponseResolver;
     private final LocaleResolver localeResolver;
-    private final DsfGateway dsfService;
     private final NodeRequestParser nodeRequestParser;
     private final NodeResponseGenerator nodeResponseGenerator;
     private final LogoutHandler logoutHandler;
     private final ConsentHandler consentHandler;
     private final OIDCProperties oidcProperties;
     private final MFService mfService;
-    private final ConfigProvider configProvider;
 
     @Autowired
     public CitizenController(
@@ -77,26 +74,22 @@ public class CitizenController {
             NodeAttributeAssembler nodeAttributeAssembler,
             IdpArtifactResolver idpAuthnResponseResolver,
             LocaleResolver localeResolver,
-            DsfGateway dsfService,
             NodeRequestParser nodeRequestParser,
             NodeResponseGenerator nodeResponseGenerator,
             LogoutHandler logoutHandler,
             ConsentHandler consentHandler,
             OIDCProperties oidcProperties,
-            MFService mfService,
-            ConfigProvider configProvider) {
+            MFService mfService) {
         this.idPortenAuthnRequestBuilder = idPortenAuthnRequestCreator;
         this.nodeAttributeAssembler = nodeAttributeAssembler;
         this.idpAuthnResponseResolver = idpAuthnResponseResolver;
         this.localeResolver = localeResolver;
-        this.dsfService = dsfService;
         this.nodeRequestParser = nodeRequestParser;
         this.nodeResponseGenerator = nodeResponseGenerator;
         this.logoutHandler = logoutHandler;
         this.consentHandler = consentHandler;
         this.oidcProperties = oidcProperties;
         this.mfService = mfService;
-        this.configProvider = configProvider;
     }
 
     /**
@@ -165,20 +158,7 @@ public class CitizenController {
     }
 
     private Optional<Person> findPerson(String uid) {
-        if (configProvider.isMfGatewayEnabled()) {
-            return findMFPerson(uid);
-        } else {
-            return findDSFPerson(uid);
-        }
-    }
-
-    private Optional<Person> findDSFPerson(String uid) {
-        PersonLookupResult result = dsfService.bySsn(uid);
-        if (result.status().equals(PersonLookupResult.Status.OK)) {
-            return result.person();
-        } else {
-            return Optional.absent();
-        }
+        return findMFPerson(uid);
     }
 
     private Optional<Person> findMFPerson(String uid) {

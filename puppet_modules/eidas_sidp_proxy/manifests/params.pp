@@ -6,8 +6,9 @@ class eidas_sidp_proxy::params {
   $saml_proxy_idp_entity_name             = hiera('idporten_opensso::idp_entity_id')
   $eidas_node_url                         = hiera('eidas_sidp_proxy::eidas_node_url')
   $proxy_auth_url                         = hiera('idporten_opensso::eidas_module_saml_destination')
-  $dsf_gateway_url                        = hiera('dsf::dsf_gateway_url')
   $mf_gateway_url                         = hiera('mf::mf_gateway_url', 'http://localhost/')
+  $mf_gateway_username                    = 'user'
+  $mf_gateway_password                    = 'password'
   $eidas_sidp_proxy_url                   = hiera('eidas_sidp_proxy::url')
   $mf_gateway_timeout                     = 10000
   $mf_gateway_retry_count                 = 2
@@ -22,8 +23,6 @@ class eidas_sidp_proxy::params {
   $saml_instant_issue_time_to_live        = 300
   $saml_instant_issue_time_skew           = 60
   $saml_ip_address_validation             = false
-  $dsf_gateway_timeout                    = 10000
-  $dsf_gateway_retry_count                = 2
   $saml_requester                         = 'http://eid.difi.no.sid'
   $saml_responder                         = 'http://eid.difi.no.sid'
   $saml_check_certificate_validity_period = false

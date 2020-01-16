@@ -53,18 +53,14 @@ messages:
   cache:
     seconds: "-1"
 
-dsf:
-  gateway:
-    retryCount: <%= @dsf_gateway_retry_count %>
-    timeout: <%= @dsf_gateway_timeout %>
-    url: <%= @dsf_gateway_url %>
-
 mf:
   gateway:
     url: <%= @mf_gateway_url %>
     timeout: <%= @mf_gateway_timeout %>
     retryCount: <%= @mf_gateway_retry_count %>
     enabled: <%= @mf_gateway_enabled %>
+    username: <%= @mf_gateway_username %>
+    password: <%= @mf_gateway_password %>
 
 saml:
   instantIssueTimeToLive: <%= @saml_instant_issue_time_to_live %>

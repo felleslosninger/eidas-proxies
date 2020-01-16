@@ -40,14 +40,12 @@ public class ConfigProvider {
     private String eidasNodeUrl;
     @Value("${sidp-proxy.url}")
     private String sidpProxyUrl;
-    @Value("${dsf.gateway.url}")
-    private String dsfGatewayUrl;
-    @Value("${dsf.gateway.timeout}")
-    private int dsfGatewayTimeout;
-    @Value("${dsf.gateway.retryCount}")
-    private int dsfRetryCount;
     @Value("${mf.gateway.url}")
     private String mfGatewayUrl;
+    @Value("${mf.gateway.username}")
+    private String mfGatewayUsername;
+    @Value("${mf.gateway.password}")
+    private String mfGatewayPassword;
     @Value("${mf.gateway.timeout}")
     private int mfGatewayTimeout;
     @Value("${mf.gateway.retryCount}")
@@ -77,6 +75,14 @@ public class ConfigProvider {
 
     public String getMfGatewayUrl() {
         return mfGatewayUrl;
+    }
+
+    public String getMfGatewayUsername() {
+        return mfGatewayUsername;
+    }
+
+    public String getMfGatewayPassword() {
+        return mfGatewayPassword;
     }
 
     public int instantIssueTimeToLive() {
@@ -121,18 +127,6 @@ public class ConfigProvider {
 
     public File fileConfigCountriesAttributes() {
         return file(fileConfigCountriesAttributes);
-    }
-
-    public URL dsfGatewayUrl() {
-        return url(dsfGatewayUrl, "dsfGatewayUrl");
-    }
-
-    public Integer dsfGatewayTimeout() {
-        return dsfGatewayTimeout;
-    }
-
-    public int dsfRetryCount() {
-        return dsfRetryCount;
     }
 
     public String idPortenKeystoreLocation() {

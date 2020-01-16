@@ -31,12 +31,6 @@ public class ConfigProvider {
     private int instantIssueTimeToLive;
     @Value("${saml.instantIssueTimeSkew}")
     private int instantIssueTimeSkew;
-    @Value("${dsf.gateway.url}")
-    private String dsfGatewayUrl;
-    @Value("${dsf.gateway.timeout}")
-    private int dsfGatewayTimeout;
-    @Value("${dsf.gateway.retryCount}")
-    private int dsfRetryCount;
     @Value("${eventlog.jms.queuename}")
     private String jmsQueueName;
     @Value("${eventlog.jms.url}")
@@ -66,6 +60,10 @@ public class ConfigProvider {
     private String cIDPProxyKeystorePrivatekeyPassword;
     @Value("${mf.gateway.url}")
     private String mfGatewayUrl;
+    @Value("${mf.gateway.username}")
+    private String mfGatewayUsername;
+    @Value("${mf.gateway.password}")
+    private String mfGatewayPassword;
     @Value("${mf.gateway.timeout}")
     private int mfGatewayTimeout;
     @Value("${mf.gateway.retryCount}")
@@ -82,6 +80,14 @@ public class ConfigProvider {
 
     public String getMfGatewayUrl() {
         return mfGatewayUrl;
+    }
+
+    public String getMfGatewayUsername() {
+        return mfGatewayUsername;
+    }
+
+    public String getMfGatewayPassword() {
+        return mfGatewayPassword;
     }
 
     public String auditLogDir() {
@@ -102,18 +108,6 @@ public class ConfigProvider {
 
     public int instantIssueTimeSkew() {
         return instantIssueTimeSkew;
-    }
-
-    public URL dsfGatewayUrl() {
-        return url(dsfGatewayUrl, "dsfGatewayUrl");
-    }
-
-    public Integer dsfGatewayTimeout() {
-        return dsfGatewayTimeout;
-    }
-
-    public int dsfRetryCount() {
-        return dsfRetryCount;
     }
 
     public String jmsQueueName() {
@@ -244,9 +238,6 @@ public class ConfigProvider {
                 .add("auditLogDataSeparator", auditLogDataSeparator)
                 .add("instantIssueTimeToLive", instantIssueTimeToLive)
                 .add("instantIssueTimeSkew", instantIssueTimeSkew)
-                .add("dsfGatewayUrl", dsfGatewayUrl)
-                .add("dsfGatewayTimeout", dsfGatewayTimeout)
-                .add("dsfRetryCount", dsfRetryCount)
                 .add("jmsQueueName", jmsQueueName)
                 .add("jmsUrl", jmsUrl)
                 .add("idpPMetadataProvider", idpMetadataProvider)

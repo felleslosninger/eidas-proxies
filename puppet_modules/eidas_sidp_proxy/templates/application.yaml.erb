@@ -41,11 +41,6 @@ server:
     servlet:
         context-path: /<%= @context %>
 
-dsf:
-    gateway:
-        retryCount: <%= @dsf_gateway_retry_count %>
-        timeout: <%= @dsf_gateway_timeout %>
-        url: <%= @dsf_gateway_url %>
 eidas:
     sidp-proxy:
         dummyEnabled: <%= @eidas_sidp_proxy_dummy_enabled %>
@@ -68,6 +63,8 @@ mf:
         retryCount: <%= @mf_gateway_retry_count %>
         timeout: <%= @mf_gateway_timeout %>
         url: <%= @mf_gateway_url %>
+        username: <%= @mf_gateway_username %>
+        password: <%= @mf_gateway_password %>
 saml:
     idp:
         entityName: <%= @saml_proxy_idp_entity_name %>

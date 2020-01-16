@@ -106,7 +106,7 @@ services:
         constraints:
           - node.labels.atest == true
   idporten-admin:
-    image: eid-jenkins02.dmz.local:8081/idporten-admin:latest
+    image: eid-jenkins02.dmz.local:8082/idporten-admin:latest
     extra_hosts:
       - "eid-elk-app01.dmz.local:10.243.220.21"
     ports:
@@ -143,7 +143,7 @@ services:
         constraints:
           - node.labels.atest == true
   logwriter:
-    image: eid-jenkins02.dmz.local:8081/logwriter:latest
+    image: eid-jenkins02.dmz.local:8082/logwriter:latest
     extra_hosts:
       - "eid-elk-app01.dmz.local:10.243.220.21"
     ports:
@@ -182,19 +182,8 @@ services:
       placement:
         constraints:
           - node.labels.atest == true
-  dsf-gateway:
-    image: eid-jenkins02.dmz.local:8081/dsf-gateway:latest
-    ports:
-      - 8080
-    networks:
-      atest:
-    dns: 8.8.8.8
-    deploy:
-      placement:
-        constraints:
-          - node.labels.atest == true
   mf-gateway:
-    image: eid-jenkins02.dmz.local:8081/mf-gateway:latest
+    image: eid-jenkins02.dmz.local:8082/mf-gateway:latest
     ports:
       - 8080
     networks:

@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import eu.eidas.auth.commons.protocol.eidas.IEidasAuthenticationRequest;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
 import no.difi.eidas.cproxy.TestData;
-import no.difi.eidas.cproxy.config.ConfigProvider;
 import no.difi.eidas.cproxy.config.OIDCProperties;
 import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.authentication.ConsentHandler;
@@ -21,8 +20,6 @@ import no.difi.eidas.cproxy.integration.mf.MFService;
 import no.difi.eidas.cproxy.integration.node.NodeRequestParser;
 import no.difi.eidas.cproxy.integration.node.NodeResponseGenerator;
 import no.difi.eidas.idpproxy.SubjectBasicAttribute;
-import no.difi.eidas.idpproxy.integrasjon.dsf.DsfGateway;
-import no.difi.eidas.idpproxy.integrasjon.dsf.Person;
 import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import no.difi.eidas.idpproxy.test.SamlBootstrap;
 import no.difi.opensaml.util.ConvertUtil;
@@ -36,7 +33,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.opensaml.saml2.core.AuthnRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
@@ -82,8 +78,6 @@ public class CitizenControllerTest extends TestData{
     @Mock
     private NodeRequestParser nodeRequestParser;
     @Mock
-    private DsfGateway dsfGateway;
-    @Mock
     private MFService mfService;
     @Mock
     private NodeResponseGenerator nodeResponseGenerator;
@@ -95,8 +89,6 @@ public class CitizenControllerTest extends TestData{
     private CitizenController controller;
     @Mock
     private IEidasAuthenticationRequest eidasRequestMock;
-    @Mock
-    private ConfigProvider configProvider;
 
     private MockMvc mockMvc;
 
@@ -179,7 +171,7 @@ public class CitizenControllerTest extends TestData{
         when(nodeAttributeAssembler.assembleAttributes(any(AuthenticationContext.class), any(ResponseData.class))).thenReturn(expectedAttributes);
         String uid = "uid";
         when(mockAuthnResponse.uid()).thenReturn(uid);
-        when(dsfGateway.bySsn(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
+        when(mfService.lookup(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
         when(mockAuthnResponse.securityLevel()).thenReturn("3");
 
         // When
@@ -215,7 +207,6 @@ public class CitizenControllerTest extends TestData{
         when(mockAuthnResponse.uid()).thenReturn(uid);
         when(mfService.lookup(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
         when(mockAuthnResponse.securityLevel()).thenReturn("3");
-        when(configProvider.isMfGatewayEnabled()).thenReturn(true);
 
         // When
         ResultActions resultActions = mockMvc.perform(
@@ -318,8 +309,7 @@ public class CitizenControllerTest extends TestData{
         when(mockAuthnResponse.securityLevel()).thenReturn("3");
         when(artifactResolver.resolve(anyString())).thenReturn(mockAuthnResponse);
         when(nodeAttributeAssembler.assembleAttributes(any(AuthenticationContext.class), any(ResponseData.class))).thenReturn(expectedAttributes);
-        when(dsfGateway.bySsn(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
-        when(configProvider.isMfGatewayEnabled()).thenReturn(false);
+        when(mfService.lookup(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
 
         // When
         ResultActions resultActions = mockMvc.perform(
@@ -413,7 +403,7 @@ public class CitizenControllerTest extends TestData{
         when(mockAuthnResponse.uid()).thenReturn(uid);
         when(mockAuthnResponse.culture()).thenReturn(culture);
         when(artifactResolver.resolve(anyString())).thenReturn(mockAuthnResponse);
-        when(dsfGateway.bySsn(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
+        when(mfService.lookup(uid)).thenReturn(new PersonLookupResult(PersonLookupResult.Status.OK, Optional.absent()));
 
         mockMvc.perform(
                 get("/idportenResponse")

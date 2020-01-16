@@ -7,8 +7,9 @@ class eidas_cidp_proxy::params {
   $saml_proxy_idp_entity_name             = hiera('idporten_opensso::idp_entity_id')
   $saml_idp_entity_name                   = hiera('idporten_opensso::idp_entity_id')
   $saml_idp_base_url                      = hiera('idporten_opensso::opensso_main_site')
-  $dsf_gateway_url                        = hiera('dsf::dsf_gateway_url')
   $mf_gateway_url                         = hiera('mf::mf_gateway_url', 'http://localhost/')
+  $mf_gateway_username                    = 'user'
+  $mf_gateway_password                    = 'password'
   $saml_proxy_sp_entity_name              = 'eidas-cidp-proxy'
   $sp_url                                 = hiera('eidas_cidp_proxy::sp_url')
   $oidc_enable                            = false
@@ -16,8 +17,6 @@ class eidas_cidp_proxy::params {
   $oidc_client_id                         = hiera('eidas_cidp_proxy::oidc_client_id')
   $oidc_client_secret                     = hiera('eidas_cidp_proxy::oidc_client_secret')
   $oidc_redirect_uri                      = hiera('eidas_cidp_proxy::oidc_redirect_uri')
-  $dsf_gateway_timeout                    = 10000
-  $dsf_gateway_retry_count                = 2
   $mf_gateway_timeout                     = 10000
   $mf_gateway_retry_count                 = 2
   $mf_gateway_enabled                     = false

@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MFServiceTest {
-
+    private static final String CLIENT_ID_HEADER = "Client-Id";
     private static final String TEST_PID = "05068907693";
     private static final String TEST_EIDAS_PERSON_IDENTIFIER = "CE/NO/05061989";
     private static final String TEST_SHORT_EIDAS_PERSON_IDENTIFIER = "05061989";
@@ -54,14 +55,18 @@ public class MFServiceTest {
         mfService = new MFService(attributesConfigProvider, () -> authState, configProvider, restTemplate);
         when(authState.getCountryCode()).thenReturn("CE");
         when(configProvider.getMfGatewayUrl()).thenReturn("http://localhost:8080");
+        when(configProvider.getMfGatewayUsername()).thenReturn("user");
+        when(configProvider.getMfGatewayPassword()).thenReturn("password");
     }
 
     @Test
     public void noCountryConfigWithNoMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.empty());
         Map<String, String> attributes = new HashMap<>();
-        when(restTemplate.getForObject(MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test", String.class))
-                .thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test";
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
         attributes.put(EIDAS_PERSON_IDENTIFIER_ATTRIBUTE_NAME, "test");
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
                 .attributes(attributes)
@@ -74,7 +79,8 @@ public class MFServiceTest {
     public void noCountryConfigWithMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.empty());
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", TEST_EIDAS_PERSON_IDENTIFIER);
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -90,7 +96,7 @@ public class MFServiceTest {
     public void noCountryConfigWithMatchMFMockTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.empty());
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+
         when(configProvider.eIDASIdentifierDnumbers()).thenReturn(new HashMap<String, String>() {{
             this.put(TEST_SHORT_EIDAS_PERSON_IDENTIFIER, TEST_PID);
         }});
@@ -108,7 +114,8 @@ public class MFServiceTest {
     @Test
     public void countryConfigWithNoSpecialExtractionRulesNoMatchTest() {
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -136,7 +143,8 @@ public class MFServiceTest {
     public void countryConfigWithGivenEidasIdTest(String eidasIdentifikator, String url) {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, null, null, null)));
         String expectedUrl = MF_URL + url;
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", eidasIdentifikator);
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -154,7 +162,8 @@ public class MFServiceTest {
         List<Attribute> countryAttributes = Collections.singletonList(new Attribute("TaxReference", true));
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("IT", "Italy", countryAttributes, "TaxReference", null, "(.*)")));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=ITA&utenlandskPersonIdentifikasjon=05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("TaxReference", TEST_SHORT_EIDAS_PERSON_IDENTIFIER);
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -170,7 +179,8 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeNullNoMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -186,8 +196,8 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeNullFallbackMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class))
-                .thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", TEST_EIDAS_PERSON_IDENTIFIER);
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -203,7 +213,9 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeNotNullNoMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
         Map<String, String> attributes = new HashMap<>();
         attributes.put("test", "test");
         EidasResponse searchParameters = EidasResponse.builder().dateOfBirth("1955-02-15")
@@ -219,7 +231,9 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, null)));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -251,7 +265,8 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeAndRegExNoMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, "(.*)")));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=test";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -270,7 +285,8 @@ public class MFServiceTest {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", null, "(.*)")));
 
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -288,7 +304,8 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeAndRegExAndPidTypeNoMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", PidType.SOCIAL_SECURITY_NUMBER, "(.*)")));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05068907693";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(null);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -306,7 +323,8 @@ public class MFServiceTest {
     public void testUsingMockWhenMFResponseThrowsException() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", PidType.SOCIAL_SECURITY_NUMBER, "(.*)")));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=05068907693";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenThrow(new RestClientException("MF is down"));
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenThrow(new RestClientException("MF is down"));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -324,7 +342,8 @@ public class MFServiceTest {
     public void countryConfigWithExtractionAttributeAndRegExAndPidTypeMatchTest() {
         when(attributesConfigProvider.getCountry(any())).thenReturn(Optional.of(new Country("CE", "Test", null, "test", PidType.SOCIAL_SECURITY_NUMBER, "(.*)")));
         String expectedUrl = MF_URL + "?foedselsdato=19550215&landkode=CEA&utenlandskPersonIdentifikasjon=CE/NO/05061989";
-        when(restTemplate.getForObject(expectedUrl, String.class)).thenReturn(TEST_PID);
+        HttpEntity<String> entity = new HttpEntity<>(createHttpHeaders());
+        when(restTemplate.exchange(expectedUrl, HttpMethod.GET, entity, String.class)).thenReturn(new ResponseEntity<>(TEST_PID, HttpStatus.OK));
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put("PersonIdentifier", "test");
@@ -351,7 +370,7 @@ public class MFServiceTest {
 
     private void verifyRestTemplateArgument(String expectedUrl) {
         ArgumentCaptor<String> argCaptor = ArgumentCaptor.forClass(String.class);
-        verify(restTemplate).getForObject(argCaptor.capture(), eq(String.class));
+        verify(restTemplate).exchange(argCaptor.capture(), any(), any(), eq(String.class));
         assertEquals(expectedUrl, argCaptor.getValue());
     }
 
@@ -375,5 +394,13 @@ public class MFServiceTest {
         mfService.convertCountryCode("XX");
     }
 
+    private HttpHeaders createHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setBasicAuth(configProvider.getMfGatewayUsername(), configProvider.getMfGatewayPassword());
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
+        headers.add(CLIENT_ID_HEADER, "eidas-sidp");
+        return headers;
+    }
 
 }

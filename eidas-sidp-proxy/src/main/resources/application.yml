@@ -56,15 +56,11 @@ messages:
   cache:
     seconds: "-1"
 
-dsf:
-  gateway:
-    url: http://eid-systest-admin01.dmz.local:10009/dsf-gateway/
-    retryCount: 10
-    timeout: 1000
-
 mf:
   gateway:
     url: http://localhost/mf-gateway
+    username: user
+    password: password
     timeout: 5000
     retryCount: 1
 

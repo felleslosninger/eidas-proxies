@@ -13,10 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -31,6 +33,7 @@ public class MFService {
     private static final PersonLookupResult PERSON_LOOKUP_RESULT_NOT_FOUND = new PersonLookupResult(
             PersonLookupResult.Status.MULTIPLEFOUND,
             Optional.absent());
+    private static final String CLIENT_ID_HEADER = "Client-Id";
     private static final String DEFAULT_EIDAS_PERSONIDENTIFIER_FIELD = "PersonIdentifier";
 
     private static final String MF_PARAM_FOEDSELSDATO = "foedselsdato";
@@ -71,7 +74,12 @@ public class MFService {
                     .toUriString();
             String norskPersonIdentifikator = null;
             try {
-                norskPersonIdentifikator = restTemplate.getForObject(uriString, String.class);
+                HttpHeaders headers = createHttpHeaders();
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+                ResponseEntity<String> response = restTemplate.exchange(uriString, HttpMethod.GET, entity, String.class);
+                if (response.getStatusCode() == HttpStatus.OK) {
+                    norskPersonIdentifikator = response.getBody();
+                }
             } catch (RuntimeException e) { //RestClientException
                 log.error("Failed to match person from eIDAS in MF-Gateway", e);
             }
@@ -94,6 +102,15 @@ public class MFService {
             }
         }
         return PERSON_LOOKUP_RESULT_NOT_FOUND;
+    }
+
+    private HttpHeaders createHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setBasicAuth(configProvider.getMfGatewayUsername(), configProvider.getMfGatewayPassword());
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
+        headers.add(CLIENT_ID_HEADER, "eidas-sidp");
+        return headers;
     }
 
     /**

@@ -85,6 +85,12 @@
                 <artifactId>lib-mvc-version</artifactId>
                 <version>${eid.common.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <optional>true</optional>
+            </dependency>
             <!-- Spring framework -->
 
             <dependency>

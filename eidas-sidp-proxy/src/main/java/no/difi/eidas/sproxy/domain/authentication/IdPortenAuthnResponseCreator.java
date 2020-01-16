@@ -1,6 +1,5 @@
 package no.difi.eidas.sproxy.domain.authentication;
 
-import no.difi.eidas.idpproxy.integrasjon.dsf.DsfGateway;
 import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import no.difi.eidas.sproxy.config.ConfigProvider;
 import no.difi.eidas.sproxy.domain.audit.AuditLog;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class IdPortenAuthnResponseCreator {
@@ -43,17 +41,15 @@ public class IdPortenAuthnResponseCreator {
 
     private final ConfigProvider configProvider;
     private final InstantIssuer instantIssuer;
-    private final DsfGateway dsfGateway;
     private final IdPortenKeyProvider idPortenKeyProvider;
     private final AuditLog auditLog;
     private final ObjectFactory<AuthState> authStateObjectFactory;
     private final MFService mfService;
 
     @Autowired
-    public IdPortenAuthnResponseCreator(ConfigProvider configProvider, InstantIssuer instantIssuer, DsfGateway dsfGateway, IdPortenKeyProvider idPortenKeyProvider, AuditLog auditLog, ObjectFactory<AuthState> authStateObjectFactory, MFService mfService) {
+    public IdPortenAuthnResponseCreator(ConfigProvider configProvider, InstantIssuer instantIssuer, IdPortenKeyProvider idPortenKeyProvider, AuditLog auditLog, ObjectFactory<AuthState> authStateObjectFactory, MFService mfService) {
         this.configProvider = configProvider;
         this.instantIssuer = instantIssuer;
-        this.dsfGateway = dsfGateway;
         this.idPortenKeyProvider = idPortenKeyProvider;
         this.auditLog = auditLog;
         this.authStateObjectFactory = authStateObjectFactory;
@@ -120,28 +116,8 @@ public class IdPortenAuthnResponseCreator {
             }
         }
 
-        if (identityMatch.contains(IDENTITY_MATCH_STATUS_BEST_EFFORT)) {
-            PersonLookupResult result = dsfLookup(eidasResponse.name());
-            if (result.person().isPresent()) {
-                builder.attribute(SAML_ATTRIBUTE_PERSONNUMBER, result.person().get().fødselsnummer());
-            }
-            builder.attribute(SAML_ATTRIBUTE_DSF_STATUS, result.status().value());
-            builder.attribute(SAML_ATTRIBUTE_IDENTITY_MATCH, convertDsfStatusToIdentityMatch(result));
-            return;
-        }
-
         builder.attribute(SAML_ATTRIBUTE_DSF_STATUS, PersonLookupResult.Status.MULTIPLEFOUND.value());
         builder.attribute(SAML_ATTRIBUTE_IDENTITY_MATCH, IDENTITY_MATCH_STATUS_NOT_FOUND);
-    }
-
-    private PersonLookupResult dsfLookup(Optional<EidasResponse.Name> eidasName) {
-        if (! eidasName.isPresent()) {
-            return new PersonLookupResult(PersonLookupResult.Status.NODSFSEARCH, com.google.common.base.Optional.absent());
-        }
-        return dsfGateway.byNameAndBirth(
-                eidasName.get().firstName(),
-                eidasName.get().lastName(),
-                birth(eidasName.get().birth()));
     }
 
     protected String convertDsfStatusToIdentityMatch(PersonLookupResult result) {

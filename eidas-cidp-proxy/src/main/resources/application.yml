@@ -53,11 +53,6 @@ auditlog:
 
 client:
   id: IdpProxy
-dsf:
-  gateway:
-    retryCount: 1
-    timeout: 5000
-    url: http://eid-vag-admin:10009/dsf-gateway
 eidas-node:
   url: http://localhost/EidasNode/ServiceProvider
 eventlog:
@@ -79,6 +74,8 @@ mf:
     retryCount: 1
     timeout: 5000
     url: http://localhost/mf-gateway
+    username: user
+    password: password
 saml:
   idp:
     entityName: eidas-proxy-idp

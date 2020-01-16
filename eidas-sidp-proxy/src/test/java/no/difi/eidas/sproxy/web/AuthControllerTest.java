@@ -51,7 +51,6 @@ public class AuthControllerTest {
                 new ConfigProvider(),
                 new InstantIssuer(),
                 null,
-                null,
                 auditLog,
                 authStateObjectFactory,
                 new MFService(null, null, null, null));
@@ -61,7 +60,7 @@ public class AuthControllerTest {
                 null,
                 idPortenAuthnResponseCreator,
                 null,
-                authStateObjectFactory);
+                authStateObjectFactory, null);
         when(idPortenAuthnRequest.getID()).thenReturn("requestId");
         when(httpServletRequest.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute("idPortenSamlAuthnRequest")).thenReturn(idPortenAuthnRequest);

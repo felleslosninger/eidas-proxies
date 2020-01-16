@@ -1,5 +1,7 @@
 package no.difi.eidas.sproxy.web;
 
+import no.difi.eidas.idpproxy.integrasjon.dsf.Person;
+import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import no.difi.eidas.sproxy.domain.attribute.AttributesConfigProvider;
 import no.difi.eidas.sproxy.domain.authentication.IdPortenAuthnRequest;
 import no.difi.eidas.sproxy.domain.authentication.IdPortenAuthnRequestReceiver;
@@ -13,6 +15,7 @@ import no.difi.eidas.sproxy.integration.eidas.response.EidasErrorResponse;
 import no.difi.eidas.sproxy.integration.eidas.response.EidasResponse;
 import no.difi.eidas.sproxy.integration.eidas.response.EidasResponseReceiver;
 import no.difi.eidas.sproxy.integration.eidas.response.EidasSamlResponse;
+import no.difi.eidas.sproxy.integration.mf.MFService;
 import no.difi.opensaml.util.ConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +61,7 @@ public class AuthController {
     private final IdPortenAuthnResponseCreator idPortenAuthnResponseCreator;
     private final AttributesConfigProvider attributesConfigProvider;
     private final ObjectFactory<AuthState> authStateObjectFactory;
+    private final MFService mfService;
 
     @Autowired
     public AuthController(
@@ -67,7 +71,7 @@ public class AuthController {
             EidasResponseReceiver eidasResponseReceiver,
             IdPortenAuthnResponseCreator idPortenAuthnResponseCreator,
             AttributesConfigProvider attributesConfigProvider,
-            ObjectFactory<AuthState> authStateObjectFactory) {
+            ObjectFactory<AuthState> authStateObjectFactory, MFService mfService) {
         this.idPortenAuthnRequestReceiver = idPortenAuthnRequestReceiver;
         this.encoder = convertUtil;
         this.eidasAuthenticator = eidasAuthenticator;
@@ -75,6 +79,7 @@ public class AuthController {
         this.idPortenAuthnResponseCreator = idPortenAuthnResponseCreator;
         this.attributesConfigProvider = attributesConfigProvider;
         this.authStateObjectFactory = authStateObjectFactory;
+        this.mfService = mfService;
     }
 
     @RequestMapping(value = AuthController.path, method = RequestMethod.GET)
@@ -127,6 +132,23 @@ public class AuthController {
                 .addObject("authnResponse", encoder.zipAndEncodeBase64(response.toString()))
                 .addObject("consumerServiceUrl", authnRequest.getAssertionConsumerServiceURL());
     }
+
+//    @RequestMapping(value = "/test-mf-sidp")
+//    private String testMfGateway(@RequestParam("pid") String pid) {
+//        EidasResponse eidasResponse = EidasResponse.builder()
+//                .dateOfBirth("1955-02-15")
+//                .attributes(attributes)
+//                .build();
+//        PersonLookupResult lookup = mfService.lookup(eidasResponse);
+//        if (mfPerson.isPresent()) {
+//            logger.warn("mfPerson: " + mfPerson.get().etternavn() + " forkortet navn: " + mfPerson.get().fornavn());
+//            return mfPerson.get().etternavn();
+//        } else {
+//            logger.warn("Kunne ikke hente ut person");
+//            return "Bom";
+//        }
+//    }
+
 
     @RequestMapping(value = AuthController.pathCancel, method = RequestMethod.GET)
     public ModelAndView cancelAuthentication(HttpServletRequest request) {

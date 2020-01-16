@@ -4,9 +4,6 @@ import eu.eidas.auth.engine.ProtocolEngineFactory;
 import eu.eidas.auth.engine.ProtocolEngineI;
 import eu.eidas.auth.engine.configuration.SamlEngineConfigurationException;
 import eu.eidas.auth.engine.configuration.dom.ProtocolEngineConfigurationFactory;
-import no.difi.dsfgateway.DsfClientId;
-import no.difi.eidas.idpproxy.integrasjon.dsf.DsfGateway;
-import no.difi.eidas.idpproxy.integrasjon.dsf.DsfGatewayBuilder;
 import no.difi.opensaml.util.ConvertUtil;
 import no.difi.opensaml.util.SAMLUtil;
 import no.idporten.log.audit.AuditLogger;
@@ -18,8 +15,6 @@ import no.idporten.log.event.EventLogger;
 import no.idporten.log.event.EventLoggerImpl;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -41,7 +36,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.jms.ConnectionFactory;
-import java.util.Objects;
 
 @Configuration
 @EnableWebMvc
@@ -127,17 +121,6 @@ public class SpringConfig implements WebMvcConfigurer {
         logger.setELFWriter(elfWriter);
         logger.setDataSeparator(config.auditLogDataSeparator());
         return logger;
-    }
-
-    @Bean
-    @Scope
-    public DsfGateway dsfGateway(ConfigProvider configProvider) {
-        return new DsfGatewayBuilder(
-                configProvider.dsfGatewayUrl(),
-                DsfClientId.IdpProxy.getClientName(),
-                configProvider.dsfGatewayTimeout()
-        ).retry(configProvider.dsfRetryCount())
-                .build();
     }
 
     @Bean
