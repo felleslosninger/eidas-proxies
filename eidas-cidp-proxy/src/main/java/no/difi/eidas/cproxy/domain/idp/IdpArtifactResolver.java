@@ -17,9 +17,13 @@ import org.opensaml.ws.soap.client.http.HttpSOAPClient;
 import org.opensaml.ws.soap.common.SOAPException;
 import org.opensaml.ws.soap.soap11.Body;
 import org.opensaml.ws.soap.soap11.Envelope;
+import org.opensaml.ws.soap.soap11.impl.FaultImpl;
 import org.opensaml.xml.Configuration;
+import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.XMLObjectBuilderFactory;
 import org.opensaml.xml.security.SecurityException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
@@ -33,6 +37,7 @@ public class IdpArtifactResolver {
     private final AuditLog auditLog;
     private final HttpSOAPClient soapClient;
     private final SamlEncrypter encrypter;
+    private final Logger logger = LoggerFactory.getLogger(IdpArtifactResolver.class);
 
     @Autowired
     public IdpArtifactResolver(
@@ -75,11 +80,24 @@ public class IdpArtifactResolver {
     private IdPAuthnResponse resolveArtifact(ArtifactResolve artifactResolve) {
         Envelope soapResponse = soapResponse(artifactResolve);
         Preconditions.checkNotNull(soapResponse);
-        ArtifactResponse artifactResponse = (ArtifactResponse) soapResponse.getBody().getUnknownXMLObjects().get(0);
-        Preconditions.checkNotNull(artifactResponse);
-        return auditLog.idpResponse(
-                new IdPAuthnResponse((Response) artifactResponse.getMessage(), encrypter)
-        );
+        XMLObject xmlObject = soapResponse.getBody().getUnknownXMLObjects().get(0);
+        if (xmlObject instanceof FaultImpl) {
+            FaultImpl fault = (FaultImpl) xmlObject;
+            logger.error("Feil fra Saml: Code: " + fault.getCode()
+                    + " message: " + fault.getMessage()
+                    + " actor: " + fault.getActor().toString()
+                    + " details: " + fault.getDetail().toString());
+            throw new RuntimeException("Feil i pålogging");
+        } else if (xmlObject instanceof ArtifactResponse) {
+            ArtifactResponse artifactResponse = (ArtifactResponse) xmlObject;
+            Preconditions.checkNotNull(artifactResponse);
+            return auditLog.idpResponse(
+                    new IdPAuthnResponse((Response) artifactResponse.getMessage(), encrypter)
+            );
+        } else {
+            logger.error("Unknown type of object: " + xmlObject.toString());
+            throw new RuntimeException("Feil i returnert artifact");
+        }
     }
 
 
