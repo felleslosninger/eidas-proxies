@@ -84,7 +84,7 @@ public class IdpArtifactResolver {
         if (xmlObject instanceof FaultImpl) {
             FaultImpl fault = (FaultImpl) xmlObject;
             logger.error("Feil fra Saml: Code: " + fault.getCode()
-                    + " message: " + fault.getMessage()
+                    + " message: " + (fault.getMessage() == null ? " - " : fault.getMessage().getValue())
                     + " actor: " + (fault.getActor() == null ? "-" : fault.getActor().toString())
                     + " details: " + (fault.getDetail() == null ? "- " : fault.getDetail().toString()));
             throw new RuntimeException("Feil i pålogging");
