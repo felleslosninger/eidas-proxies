@@ -10,12 +10,16 @@ import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.parse.BasicParserPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Scope("singleton")
@@ -72,6 +76,14 @@ public class ConfigProvider {
     private String messagePath;
     @Value("${mf.gateway.enabled:false}")
     private boolean mfGatewayEnabled;
+    @Value("${users.test:06045000883.HANNE/BREI/1950-04-06}")
+    private String mockUsers;
+
+    private static final Logger log = LoggerFactory.getLogger(ConfigProvider.class);
+
+    public Map<String, String> mockUsers() {
+        return parseTestUsers(mockUsers);
+    }
 
     private MetadataProvider idpMetadataProvider;
     private MetadataProvider spMetadataProvider;
@@ -148,6 +160,20 @@ public class ConfigProvider {
 
     public URL cidpProxyAuthUrl() {
         return endpointUrl(cidpProxyUrl, "/auth", "cidpProxyAuthUrl");
+    }
+
+    public Map<String, String> parseTestUsers(String testUsers) {
+        Map<String,String> map = new HashMap<>();
+        for (String entry: testUsers.split(",")) {
+            if (entry.length() == 0) {
+                continue;
+            }
+            String[] split = entry.split(":");
+            String personIdentifikator = split[0];
+            log.debug("Testuser: key: -" + personIdentifikator + "- value: " + split[1]);
+            map.put(personIdentifikator, split[1]);
+        }
+        return map;
     }
 
     public URL cidpProxyMetadataUrl() {

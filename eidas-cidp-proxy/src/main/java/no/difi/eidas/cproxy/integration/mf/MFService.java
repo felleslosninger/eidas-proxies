@@ -5,6 +5,7 @@ import no.difi.eidas.cproxy.config.ConfigProvider;
 import no.difi.eidas.idpproxy.integrasjon.dsf.Person;
 import no.difi.eidas.idpproxy.integrasjon.dsf.restapi.PersonLookupResult;
 import no.difi.eidas.idpproxy.integrasjon.mf.MFPersonResource;
+import no.difi.eidas.idpproxy.integrasjon.mf.MFPersonnavnResource;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
+import java.util.Map;
 
 @Service
 public class MFService {
@@ -53,6 +55,26 @@ public class MFService {
                 }
             } catch (RuntimeException e) { //RestClientException
                 log.error("Failed to match person from eIDAS in MF-Gateway", e);
+            }
+            //mock for cucumbertest
+            if (person == null) {
+                // Test users mock, property must be empty in hiera in production to avoid using the mock.
+                log.debug("leter i mock-eidas: key = " + uid);
+                Map<String, String> mockUserMap = configProvider.mockUsers();
+                String mockUserData = mockUserMap.get(uid);
+                if (mockUserData != null) {
+                    String[] fields = mockUserData.split("/");
+                    person = new MFPersonResource();
+                    person.setPersonIdentifikator(uid);
+                    MFPersonnavnResource navn = MFPersonnavnResource.builder()
+                            .fornavn(fields[0])
+                            .etternavn(fields[1])
+                            .forkortetNavn(fields[0] + " " + fields[1])
+                            .build();
+                    person.setNavn(navn);
+                    person.setFoedselsdato(fields[2]);
+                    person.setFoedested("NOR");
+                }
             }
             if (person != null
                     && person.getPersonIdentifikator() != null
