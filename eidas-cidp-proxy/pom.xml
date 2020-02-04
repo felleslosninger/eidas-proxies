@@ -20,6 +20,8 @@
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <bcprov-jdk15.version>1.60</bcprov-jdk15.version>
         <asm-all.version>2.1</asm-all.version>
+        <javax.cache.version>1.1.1</javax.cache.version>
+        <ehcache.version>3.8.0</ehcache.version>
         <!-- TEST PROPERTIES -->
         <skip.integration.tests>true</skip.integration.tests>
         <skip.unit.tests>false</skip.unit.tests>
@@ -66,6 +68,20 @@
         <dependency>
             <groupId>no.difi.common</groupId>
             <artifactId>resilience-util-spring-boot-2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>${javax.cache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
         </dependency>
         <dependency>
             <groupId>no.difi.common</groupId>

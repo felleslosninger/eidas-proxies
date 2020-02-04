@@ -89,6 +89,8 @@ public class CitizenControllerTest extends TestData{
     private CitizenController controller;
     @Mock
     private IEidasAuthenticationRequest eidasRequestMock;
+    @Mock
+    private SamlArtifactCache receivedSamlArtfacts;
 
     private MockMvc mockMvc;
 
@@ -143,7 +145,6 @@ public class CitizenControllerTest extends TestData{
         }
     }
 
-
     @Test
     public void verifyViewRejectConsent() throws Exception {
         AuthenticationContext context = new AuthenticationContext();
@@ -193,6 +194,25 @@ public class CitizenControllerTest extends TestData{
                 authenticationContext.assembledAttributes()
         );
         assertNotNull(session.getAttribute(IdportenSession.IDPORTEN_SESSION_ATTRIBUTE));
+    }
+
+    @Test
+    public void whenHandlingIdPortenResponseDetectReusedSamlArtifact() throws Exception {
+        // Given
+        NodeAttributes expectedAttributes = NodeAttributes.builder().build();
+        IdPAuthnResponse mockAuthnResponse = Mockito.mock(IdPAuthnResponse.class);
+        String dummySAMLArtifact = "dummySAMLArtifact";
+        when(receivedSamlArtfacts.getSamlArtifact(dummySAMLArtifact)).thenReturn(dummySAMLArtifact);
+
+        // When
+        MvcResult mvcResult = mockMvc.perform(
+                get("/idportenResponse")
+                        .param("SAMLart", dummySAMLArtifact)
+                        .accept(MediaType.ALL))
+                .andReturn();
+
+        // Then
+        assertEquals("error.jsp", mvcResult.getResponse().getForwardedUrl());
     }
 
 

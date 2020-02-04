@@ -6,7 +6,6 @@ import eu.eidas.auth.commons.attribute.AttributeValueMarshallingException;
 import eu.eidas.auth.commons.protocol.IAuthenticationRequest;
 import eu.eidas.auth.commons.protocol.eidas.LevelOfAssurance;
 import eu.eidas.engine.exceptions.EIDASSAMLEngineException;
-import no.difi.eidas.cproxy.config.ConfigProvider;
 import no.difi.eidas.cproxy.config.OIDCProperties;
 import no.difi.eidas.cproxy.domain.authentication.AuthenticationContext;
 import no.difi.eidas.cproxy.domain.authentication.ConsentHandler;
@@ -38,10 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.collect.FluentIterable.from;
 
@@ -67,6 +63,7 @@ public class CitizenController {
     private final ConsentHandler consentHandler;
     private final OIDCProperties oidcProperties;
     private final MFService mfService;
+    private final SamlArtifactCache receivedSamlArtifacts;
 
     @Autowired
     public CitizenController(
@@ -79,7 +76,8 @@ public class CitizenController {
             LogoutHandler logoutHandler,
             ConsentHandler consentHandler,
             OIDCProperties oidcProperties,
-            MFService mfService) {
+            MFService mfService,
+            SamlArtifactCache receivedSamlArtifacts) {
         this.idPortenAuthnRequestBuilder = idPortenAuthnRequestCreator;
         this.nodeAttributeAssembler = nodeAttributeAssembler;
         this.idpAuthnResponseResolver = idpAuthnResponseResolver;
@@ -90,6 +88,7 @@ public class CitizenController {
         this.consentHandler = consentHandler;
         this.oidcProperties = oidcProperties;
         this.mfService = mfService;
+        this.receivedSamlArtifacts = receivedSamlArtifacts;
     }
 
     /**
@@ -120,6 +119,15 @@ public class CitizenController {
         }
     }
 
+    private void checkArtifactResolve(String samlArtifact) {
+        if (receivedSamlArtifacts.getSamlArtifact(samlArtifact) != null) {
+            logger.warn("Reuse of samlArtifact: " + samlArtifact);
+            throw new IllegalArgumentException("SamlRequest can only be used once");
+        } else {
+            receivedSamlArtifacts.putSamlArtifact(samlArtifact);
+        }
+    }
+
     @RequestMapping(value = pathIdportenResponse, method = RequestMethod.GET)
     public ModelAndView receiveIdpAuthnResponseSendResponseToPeps(
             @RequestParam(samlArtifactResponse) String samlArtifact,
@@ -127,6 +135,7 @@ public class CitizenController {
             HttpServletResponse response,
             HttpSession session
     ) throws IOException {
+        checkArtifactResolve(samlArtifact);
         IdPAuthnResponse idPAuthnResponse = idpAuthnResponseResolver.resolve(samlArtifact);
         setLocale(request, response, idPAuthnResponse);
 
@@ -258,6 +267,12 @@ public class CitizenController {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleAllException(Exception ex) {
         logger.error("Generic error", ex);
+        return new ModelAndView(errorModel);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ModelAndView handleIllegalArgumentException(Exception ex) {
+        logger.warn("Illegal argument", ex);
         return new ModelAndView(errorModel);
     }
 
