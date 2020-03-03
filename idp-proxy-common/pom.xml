@@ -13,8 +13,8 @@
     <name>eIDAS IDP Proxy Common</name>
     <description>Common library for IDP proxies</description>
     <properties>
-        <cxf.version>3.3.2</cxf.version>
-        <jackson.version>2.9.9</jackson.version>
+        <cxf.version>3.3.5</cxf.version>
+        <jackson.version>2.10.2</jackson.version>
     </properties>
 
     <dependencies>
