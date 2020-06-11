@@ -74,8 +74,6 @@ public class ConfigProvider {
     private int mfRetryCount;
     @Value("${message.path}")
     private String messagePath;
-    @Value("${mf.gateway.enabled:false}")
-    private boolean mfGatewayEnabled;
     @Value("${users.test:06045000883.HANNE/BREI/1950-04-06}")
     private String mockUsers;
 
@@ -186,10 +184,6 @@ public class ConfigProvider {
         } catch (Urls.UrlMalformed e) {
             throw new RuntimeException(String.format("Wrong format for URL: %s for %s", value, description), e);
         }
-    }
-
-    public boolean isMfGatewayEnabled() {
-        return mfGatewayEnabled;
     }
 
     protected String concatUrl(String base, String resource) {

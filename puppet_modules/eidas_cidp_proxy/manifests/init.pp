@@ -7,7 +7,6 @@ class eidas_cidp_proxy (
   String $mf_gateway_password              = $eidas_cidp_proxy::params::mf_gateway_password,
   Integer $mf_gateway_timeout              = $eidas_cidp_proxy::params::mf_gateway_timeout,
   Integer $mf_gateway_retry_count          = $eidas_cidp_proxy::params::mf_gateway_retry_count,
-  Boolean $mf_gateway_enabled              = $eidas_cidp_proxy::params::mf_gateway_enabled,
   String $eventlog_jms_url                 = $eidas_cidp_proxy::params::eventlog_jms_url,
   String $eventlog_jms_queuename           = $eidas_cidp_proxy::params::eventlog_jms_queuename,
   String $saml_proxy_idp_entity_name       = $eidas_cidp_proxy::params::saml_proxy_idp_entity_name,
